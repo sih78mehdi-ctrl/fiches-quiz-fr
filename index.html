@@ -237,6 +237,27 @@ body{
 .vq-confetti{position:fixed;width:9px;height:9px;top:-10px;animation:vqConfettiFall linear forwards;z-index:1000;
   pointer-events:none;border-radius:2px}
 @keyframes vqConfettiFall{to{transform:translateY(105vh) rotate(720deg);opacity:0}}
+
+/* ---------- bouton et modale d'installation PWA ---------- */
+.install-btn{
+  font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+  background:#F4EFE2;color:var(--canvas);border:none;border-radius:20px;padding:9px 14px;
+  cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0;
+}
+.install-modal-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:2000;display:flex;
+  align-items:flex-end;justify-content:center;
+}
+.install-modal{
+  background:var(--paper);border-radius:16px 16px 0 0;padding:24px 22px 28px;max-width:480px;width:100%;
+  max-height:80vh;overflow-y:auto;
+}
+.install-modal h3{margin:0 0 14px;font-size:17px}
+.install-modal ol{margin:0 0 16px;padding-left:20px;font-size:14.5px;line-height:1.9}
+.install-modal .close-btn{
+  width:100%;padding:12px;border:none;border-radius:20px;background:var(--canvas);color:#fff;
+  font-family:'Space Mono',monospace;font-size:13px;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;
+}
 </style>
 </head>
 <body>
@@ -723,6 +744,50 @@ const MODULES = [
    ============================================================ */
 let state = { view:'home', moduleId:null, tab:'texte', vocabCat:'mots', quiz:null };
 
+/* ---------- installation PWA (Android : invite native / iOS : instructions) ---------- */
+let deferredInstallPrompt = null;
+const isIOSDevice = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  if(state.view==='home') render();
+});
+window.addEventListener('appinstalled', ()=>{
+  deferredInstallPrompt = null;
+  if(state.view==='home') render();
+});
+
+function showIOSInstallModal(){
+  const backdrop = document.createElement('div');
+  backdrop.className='install-modal-backdrop';
+  backdrop.innerHTML = `
+    <div class="install-modal">
+      <h3>📲 Installer l'application</h3>
+      <ol>
+        <li>Appuyez sur l'icône de partage <b>📤</b> en bas de Safari</li>
+        <li>Faites défiler et appuyez sur <b>« Sur l'écran d'accueil »</b></li>
+        <li>Appuyez sur <b>« Ajouter »</b> en haut à droite</li>
+      </ol>
+      <button class="close-btn" id="closeInstallModal">Compris</button>
+    </div>`;
+  backdrop.onclick = (e)=>{ if(e.target===backdrop) backdrop.remove(); };
+  document.body.appendChild(backdrop);
+  backdrop.querySelector('#closeInstallModal').onclick = ()=> backdrop.remove();
+}
+
+async function handleInstallClick(){
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    render();
+  } else if(isIOSDevice){
+    showIOSInstallModal();
+  }
+}
+
 function go(view, extra){ state = Object.assign(state, {view}, extra||{}); render(); }
 function getModule(id){ return MODULES.find(m=>m.id===id); }
 
@@ -1013,6 +1078,13 @@ function render(){
     const top = document.createElement('div');
     top.className='top';
     top.innerHTML = `<div class="brand"><span class="mark">FR·AR</span><h1>Fiches &amp; Quiz</h1></div>`;
+    if(!isStandalone && (deferredInstallPrompt || isIOSDevice)){
+      const installBtn = document.createElement('button');
+      installBtn.className='install-btn';
+      installBtn.innerHTML = '📲 Installer';
+      installBtn.onclick = handleInstallClick;
+      top.appendChild(installBtn);
+    }
     app.appendChild(top);
 
     const note = document.createElement('p');
