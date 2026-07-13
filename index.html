@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Fiches Quiz">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16213A">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<title>📚 Fiches &amp; Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@500;700&family=Tajawal:wght@400;500;700;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#16213A;
+  --canvas-2:#1E2C4D;
+  --paper:#FBF7EF;
+  --paper-2:#F2ECDD;
+  --ink:#1B1B1B;
+  --muted:#6B7280;
+  --line:#E4DCC8;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--canvas);
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(255,255,255,0.05), transparent 40%),
+    radial-gradient(circle at 85% 100%, rgba(255,255,255,0.04), transparent 45%);
+  color:var(--ink);
+  font-family:'Work Sans',sans-serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+.arabic{font-family:'Noto Naskh Arabic',serif;direction:rtl;unicode-bidi:isolate}
+.wrap{max-width:900px;margin:0 auto;padding:22px 16px 60px}
+
+/* ---------- header ---------- */
+.top{display:flex;align-items:center;justify-content:space-between;padding:6px 2px 20px;color:#F4EFE2}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .mark{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:#F4EFE2;color:var(--canvas);padding:5px 9px;border-radius:4px;font-weight:700}
+.brand h1{font-size:19px;margin:0;font-weight:700;letter-spacing:.01em}
+.backbtn{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.06em;background:none;border:1px solid rgba(244,239,226,0.4);color:#F4EFE2;padding:8px 12px;border-radius:20px;cursor:pointer}
+.backbtn:active{background:rgba(244,239,226,0.15)}
+
+/* ---------- home grid: card catalog ---------- */
+.catalog-note{color:#C9CFE0;font-size:13px;font-family:'Space Mono',monospace;letter-spacing:.04em;margin:0 0 16px 2px}
+.grid{display:grid;grid-template-columns:1fr;gap:14px}
+.card{
+  position:relative;background:var(--paper);border-radius:10px;
+  padding:20px 20px 20px 22px;cursor:pointer;border:1px solid rgba(0,0,0,0.05);
+  box-shadow:0 10px 24px -14px rgba(0,0,0,0.5);
+  transition:transform .15s ease;
+}
+.card:active{transform:scale(0.98)}
+.card::before{
+  content:'';position:absolute;left:0;top:14px;bottom:14px;width:5px;border-radius:3px;
+  background:var(--tab-color,#999);
+}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.card .emoji{font-size:28px;line-height:1}
+.card .tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--tab-color,#999);font-weight:700}
+.card h2{font-size:17px;margin:10px 0 4px;font-weight:700;line-height:1.25}
+.card p{margin:0;font-size:12.5px;color:var(--muted)}
+.card .chevron{align-self:center;color:var(--muted);font-size:20px}
+
+/* ---------- module view ---------- */
+.module-head{padding:4px 2px 18px}
+.module-head .tag{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent,#999);font-weight:700}
+.module-head h1{color:#F4EFE2;font-size:23px;margin:8px 0 0}
+
+.tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px}
+.tab{
+  font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.03em;white-space:nowrap;
+  padding:9px 14px;border-radius:8px 8px 0 0;background:rgba(244,239,226,0.08);color:#D8DCE8;
+  border:none;cursor:pointer;border-bottom:3px solid transparent;
+}
+.tab.active{background:var(--paper);color:var(--ink);border-bottom:3px solid var(--accent,#999)}
+
+.panel{background:var(--paper);border-radius:4px 10px 10px 10px;padding:22px;box-shadow:0 10px 24px -14px rgba(0,0,0,0.5)}
+
+/* reading text */
+.reading p{line-height:1.75;font-size:15px;margin:0 0 14px;color:#2b2b2b}
+.reading h3{font-family:'Space Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent,#999);margin:22px 0 8px}
+.reading table{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 14px}
+.reading td,.reading th{padding:6px 8px;border-bottom:1px solid var(--line)}
+.reading th{font-family:'Space Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:left}
+
+/* vocab categories */
+.vocab-cats{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.cat-btn{
+  flex:1;min-width:130px;background:var(--paper-2);border:1px solid var(--line);border-radius:8px;
+  padding:14px;text-align:left;cursor:pointer;font-family:'Work Sans',sans-serif;
+}
+.cat-btn b{display:block;font-size:14px;margin-bottom:2px}
+.cat-btn span{font-size:11.5px;color:var(--muted);font-family:'Space Mono',monospace}
+.cat-btn.active{border-color:var(--accent,#999);background:#fff}
+
+.vocab-list{list-style:none;margin:0;padding:0}
+.vocab-list li{
+  display:grid;grid-template-columns:1fr auto;gap:6px 14px;align-items:center;
+  padding:12px 4px;border-bottom:1px solid var(--line);
+}
+.vocab-list .fr{font-weight:600;font-size:14.5px}
+.vocab-list .def{font-size:12px;color:var(--muted);font-weight:400;display:block;margin-top:2px}
+.vocab-list .ar{font-size:17px;text-align:right;font-weight:600;color:var(--accent,#333)}
+
+/* quiz */
+.progress{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:10px;letter-spacing:.05em}
+.question{margin:0 0 14px;padding:16px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.question b{display:block;margin-bottom:10px;font-size:14.5px;line-height:1.4}
+.option{
+  display:block;padding:10px 12px;margin:6px 0;border:1px solid var(--line);border-radius:7px;
+  cursor:pointer;font-size:14px;background:var(--paper-2);
+}
+.option input{margin-right:8px}
+.question.correct{background:#EAF6EC;border-color:#8FCB9B}
+.question.wrong{background:#FBEBEA;border-color:#E5A6A0}
+.actions{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
+.btn{
+  font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;
+  border:none;border-radius:20px;padding:12px 20px;cursor:pointer;background:var(--accent,#333);color:#fff;
+}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.result-stamp{
+  margin-top:18px;text-align:center;padding:22px;border:3px solid var(--accent,#333);border-radius:10px;
+  transform:rotate(-1.2deg);font-family:'Space Mono',monospace;
+}
+.result-stamp .score{font-size:34px;font-weight:700;color:var(--accent,#333)}
+.result-stamp .msg{font-size:13px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
+
+.empty{color:var(--muted);font-size:14px;padding:20px 0;text-align:center}
+
+/* ============================================================
+   QUIZ VOCABULAIRE — style "cosmique" interactif (une question à la fois)
+   Toutes les règles sont scopées sous .vq-root pour ne rien casser ailleurs.
+   ============================================================ */
+.vq-root{
+  --vq-bg:#071a2e; --vq-card:#0f2942; --vq-card2:#143a5c;
+  --vq-accent:#2ec4b6; --vq-accent2:#4d96ff; --vq-gold:#ffd166;
+  --vq-green:#06d6a0; --vq-red:#ef476f; --vq-text:#eef7ff; --vq-muted:#8fb0c9;
+  position:relative;background:var(--vq-bg);color:var(--vq-text);
+  border-radius:14px;overflow:hidden;padding:20px 16px 28px;min-height:520px;
+  font-family:'Tajawal',sans-serif;
+}
+.vq-root *{box-sizing:border-box}
+.vq-bgglow{position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at 20% 10%, rgba(255,255,255,0.08) 0%, transparent 55%),
+             radial-gradient(ellipse at 85% 90%, rgba(255,255,255,0.06) 0%, transparent 55%);}
+.vq-stars{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.vq-star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:vqTwinkle var(--d,3s) infinite var(--del,0s)}
+@keyframes vqTwinkle{0%,100%{opacity:.2;transform:scale(1)}50%{opacity:1;transform:scale(1.5)}}
+.vq-content{position:relative;z-index:1}
+
+.vq-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.vq-back{background:var(--vq-card);border:none;color:var(--vq-muted);width:38px;height:38px;border-radius:50%;
+  font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.vq-score{background:var(--vq-card);border:2px solid var(--vq-gold);border-radius:30px;padding:5px 14px;
+  font-size:13px;font-weight:700;color:var(--vq-gold);display:flex;align-items:center;gap:6px}
+.vq-counter{color:var(--vq-muted);font-size:12.5px;font-family:'Poppins',sans-serif}
+
+.vq-progress-wrap{background:rgba(255,255,255,.08);border-radius:10px;height:8px;margin-bottom:18px;overflow:hidden}
+.vq-progress-fill{height:100%;background:linear-gradient(90deg,var(--vq-accent),var(--vq-accent2));border-radius:10px;transition:width .4s ease}
+
+.vq-qcard{background:var(--vq-card);border:1.5px solid rgba(255,255,255,.12);border-radius:16px;
+  padding:22px 18px;margin-bottom:18px;text-align:center;animation:vqSlideIn .3s ease}
+@keyframes vqSlideIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.vq-badge{display:inline-block;font-size:11px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.12);
+  color:var(--vq-accent);font-weight:700;margin-bottom:12px;letter-spacing:.4px}
+.vq-word{font-family:'Poppins',sans-serif;font-size:24px;font-weight:700;
+  background:linear-gradient(135deg,#fff,#cfeaff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:6px;cursor:pointer;display:inline-block}
+.vq-speaker{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.25);border-radius:50%;
+  width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+  font-size:15px;margin-inline-end:8px;vertical-align:middle}
+.vq-prompt{color:var(--vq-muted);font-size:13.5px;margin-top:4px}
+
+.vq-options{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
+.vq-opt{background:var(--vq-card);border:2px solid rgba(255,255,255,.1);border-radius:13px;padding:13px 9px;
+  cursor:pointer;font-family:'Tajawal',sans-serif;font-size:14.5px;font-weight:600;color:var(--vq-text);
+  min-height:50px;display:flex;align-items:center;justify-content:center;text-align:center;transition:all .15s}
+.vq-opt:disabled{cursor:default}
+.vq-opt.correct{border-color:var(--vq-green);background:rgba(6,214,160,.16);color:var(--vq-green)}
+.vq-opt.wrong{border-color:var(--vq-red);background:rgba(239,71,111,.16);color:var(--vq-red)}
+
+.vq-explain{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.14);border-radius:13px;
+  padding:13px 15px;font-size:13.5px;color:var(--vq-muted);line-height:1.6;display:none;margin-bottom:12px}
+.vq-explain.visible{display:block}
+.vq-explain b{color:var(--vq-accent)}
+.vq-explain .ok{color:var(--vq-green);font-weight:700}
+
+.vq-next{width:100%;padding:14px;background:linear-gradient(135deg,var(--vq-accent),var(--vq-accent2));
+  border:none;border-radius:14px;color:#fff;font-family:'Tajawal',sans-serif;font-size:16px;font-weight:700;
+  cursor:pointer;display:none}
+.vq-next.visible{display:block}
+
+.vq-cats{display:grid;grid-template-columns:1fr;gap:12px}
+.vq-catbtn{background:var(--vq-card);border:2px solid rgba(255,255,255,.12);border-radius:14px;padding:16px;
+  cursor:pointer;text-align:start;display:flex;align-items:center;gap:12px;color:var(--vq-text)}
+.vq-catbtn.recap{background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.04));border-color:var(--vq-gold)}
+.vq-catbtn .em{font-size:28px}
+.vq-catbtn .lbl{font-size:15px;font-weight:700}
+.vq-catbtn .cnt{font-size:12px;color:var(--vq-muted)}
+.vq-cats-title{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--vq-muted);margin:0 0 12px}
+
+.vq-stamp{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);font-size:70px;z-index:999;
+  animation:vqStampAnim .7s ease forwards;pointer-events:none}
+@keyframes vqStampAnim{0%{transform:translate(-50%,-50%) scale(0) rotate(-20deg);opacity:1}
+  50%{transform:translate(-50%,-50%) scale(1.3) rotate(5deg);opacity:1}
+  70%{transform:translate(-50%,-50%) scale(1) rotate(0);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(1.1) rotate(0);opacity:0}}
+
+.vq-result{text-align:center;padding-top:20px}
+.vq-result .icon{font-size:64px;display:block;margin-bottom:12px;animation:vqBounce 1s ease infinite}
+@keyframes vqBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.vq-result .title{font-size:22px;font-weight:900;margin-bottom:6px;
+  background:linear-gradient(135deg,var(--vq-gold),var(--vq-accent2));-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text}
+.vq-result .score{font-size:44px;font-weight:900;font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,var(--vq-accent),var(--vq-accent2));-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;margin:12px 0}
+.vq-result .pct{font-size:15px;color:var(--vq-muted);margin-bottom:18px}
+.vq-result .rating{background:var(--vq-card);border:2px solid var(--vq-gold);border-radius:14px;padding:14px;
+  margin-bottom:18px;font-size:14px;color:var(--vq-gold);font-weight:700}
+.vq-stars-line{font-size:22px;letter-spacing:3px;margin-bottom:4px}
+.vq-result-btns{display:flex;flex-direction:column;gap:9px}
+.vq-retry{padding:14px;background:linear-gradient(135deg,var(--vq-accent),var(--vq-accent2));border:none;
+  border-radius:14px;color:#fff;font-family:'Tajawal',sans-serif;font-size:15.5px;font-weight:700;cursor:pointer}
+.vq-home{padding:12px;background:transparent;border:2px solid rgba(255,255,255,.16);border-radius:14px;
+  color:var(--vq-muted);font-family:'Tajawal',sans-serif;font-size:14.5px;font-weight:600;cursor:pointer}
+
+.vq-confetti{position:fixed;width:9px;height:9px;top:-10px;animation:vqConfettiFall linear forwards;z-index:1000;
+  pointer-events:none;border-radius:2px}
+@keyframes vqConfettiFall{to{transform:translateY(105vh) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+/* ============================================================
+   DONNÉES — pour ajouter un nouveau texte plus tard, ajoute un
+   objet à ce tableau MODULES en suivant exactement la même forme.
+   - vocab.mots / vocab.verbes : {fr, def, ar}  (def optionnel)
+   - comprehension : [ "question", ["choix1","choix2","choix3","choix4"], indexBonneReponse ]
+   ============================================================ */
+const MODULES = [
+{
+  id:'graisses', title:'Les graisses au banc des accusés', icon:'🥑', color:'#C0392B',
+  source:'Infographie — nutrition & santé',
+  text:[
+   "Les régimes alimentaires riches en graisses favorisent les maladies cardiaques, mais qu'en est-il pour le cancer ? Y a-t-il une différence selon le type de graisses que nous consommons ? De fortes preuves existent pour l'oméga-6 (mauvais) et pour l'oméga-3 (bon). Pour les autres types, le lien avec le cancer est toujours obscur. Voici un état des connaissances.",
+   "__TABLE_GRAISSES__",
+   "À retenir : les régimes riches en graisses favorisent les maladies cardiaques. Le lien avec le cancer dépend du type de graisses consommées. De fortes preuves existent pour l'oméga-6 (mauvais) et l'oméga-3 (bon) ; pour les autres types, le lien reste obscur.",
+   "Idée principale : le type de graisses que nous consommons peut influencer le risque de maladies cardiaques et de cancer. Les oméga-6 sont associés à un risque plus élevé, tandis que les oméga-3 sont bénéfiques."
+  ],
+  table:{
+    headers:["Huile / graisse","Protectrice","Incertain","Risque"],
+    rows:[
+      ["Tournesol","8%","8%","82%"],["Arachide","25%","12%","63%"],["Soja","70%","14%","16%"],
+      ["Maïs","52%","8%","40%"],["Beurre","7%","3%","90%"],["Olive","10%","5%","85%"]
+    ]
+  },
+  vocab:{
+    mots:[
+      {fr:"Graisses",def:"Matières grasses présentes dans les aliments.",ar:"دُهُونٌ"},
+      {fr:"Accusés",def:"Personnes ou choses mises en cause.",ar:"مُتَّهَمُونَ"},
+      {fr:"Régimes alimentaires",def:"Habitudes de nourriture.",ar:"أَنْظِمَة غِذَائِيَّة"},
+      {fr:"Maladies cardiaques",def:"Maladies qui touchent le cœur.",ar:"أَمْرَاضُ القَلْبِ"},
+      {fr:"Cancer",def:"Maladie grave causée par des cellules anormales.",ar:"سَرَطَان"},
+      {fr:"Incertain (peut-être)",def:"Dont on n'est pas sûr.",ar:"غَيْر مُؤَكَّد (رُبَّمَا)"},
+      {fr:"Différence",def:"Chose qui n'est pas la même.",ar:"إخْتِلاَف"},
+      {fr:"Preuves",def:"Éléments qui montrent la vérité.",ar:"أَدَلَة"},
+      {fr:"Oméga-6",def:"Type d'acide gras (considéré mauvais).",ar:"أُومِيغَا-6"},
+      {fr:"Oméga-3",def:"Type d'acide gras (considéré bon).",ar:"أُومِيغَا-3"},
+      {fr:"Lien",def:"Relation entre deux choses.",ar:"رَابِطَة"},
+      {fr:"Influence protectrice",def:"Effet qui protège de maladies.",ar:"تَأْثِيرٌ وِقَائِيّ"},
+      {fr:"Augmentation du risque",def:"Fait que le danger devient plus grand.",ar:"زِيَادَةُ الخَطَرِ"},
+      {fr:"Tournesol",def:"Plante dont on tire une huile.",ar:"زَهْرُ الشَّمْس"},
+      {fr:"Arachide",def:"Cacahuète.",ar:"فُول سُودَانِي"},
+      {fr:"Soja",def:"Plante dont on tire une huile.",ar:"فُول الصُّويَا"},
+      {fr:"Maïs",def:"Plante céréalière.",ar:"ذُرَة"},
+      {fr:"Beurre",def:"Matière grasse laitière.",ar:"زُبْدَة"},
+      {fr:"Olive",def:"Fruit de l'olivier.",ar:"زَيْتُونَة"},
+      {fr:"Connaissances",def:"Ce que l'on sait actuellement.",ar:"مَعْرِفَة"}
+    ],
+    verbes:[]
+  },
+  comprehension:[
+["Quel est le sujet principal du texte ?",["Les vitamines","Les graisses","Les fruits","Les protéines"],1],
+["Les régimes riches en graisses favorisent surtout ...",["les maladies cardiaques","la croissance","la vue","la mémoire"],0],
+["Le lien avec le cancer dépend de ...",["l'âge","la taille","le type de graisses","la couleur"],2],
+["Quel type de graisse est considéré comme mauvais ?",["Oméga-3","Oméga-6","Calcium","Fer"],1],
+["Quel type de graisse est considéré comme bon ?",["Oméga-3","Oméga-6","Sucre","Sel"],0],
+["Pour les autres types de graisses, le lien avec le cancer est ...",["clair","certain","obscur","nul"],2],
+["Quelle huile a 82 % d'augmentation du risque ?",["Tournesol","Soja","Maïs","Arachide"],0],
+["Quelle graisse présente 90 % d'augmentation du risque ?",["Olive","Beurre","Soja","Maïs"],1],
+["Quelle huile a la plus forte influence protectrice ?",["Tournesol","Olive","Soja","Beurre"],2],
+["Quel pourcentage protecteur possède le soja ?",["25 %","52 %","70 %","10 %"],2],
+["L'huile d'arachide possède une influence protectrice de ...",["25 %","70 %","8 %","90 %"],0],
+["L'huile de maïs possède une influence protectrice de ...",["52 %","12 %","5 %","3 %"],0],
+["L'huile d'olive présente une augmentation du risque de ...",["16 %","40 %","63 %","85 %"],3],
+["Le beurre a une influence protectrice de ...",["70 %","7 %","25 %","52 %"],1],
+["Le tableau compare combien de types de graisses ?",["4","5","6","7"],2],
+["Les oméga-3 sont considérés comme ...",["bénéfiques","dangereux","inutiles","toxiques"],0],
+["Les oméga-6 sont associés à ...",["un risque plus élevé","une protection totale","aucun effet","une guérison"],0],
+["Le texte présente ...",["une histoire","une publicité","un état des connaissances","une recette"],2],
+["L'idée principale concerne ...",["les sports","les graisses et la santé","les animaux","les transports"],1],
+["Le risque étudié concerne les maladies cardiaques et ...",["la grippe","le cancer","l'asthme","la fatigue"],1]
+  ]
+},
+{
+  id:'microscope', title:'Le microscope', icon:'🔬', color:'#2E6F9E',
+  source:'Fiche pédagogique — sciences',
+  text:[
+   "Le microscope est un appareil optique qui permet d'agrandir l'image et donc de voir de petits détails. C'est l'appareil d'observations scientifiques le plus connu du grand public. Il est utilisé surtout en biologie pour étudier les cellules, en géochimie pour reconnaître les roches et en métallurgie (ou métallographie) pour examiner la structure d'un métal ou d'un alliage. Le premier microscope fut en 1590, sans doute fabriqué par Hans et Zacharias Janssen, deux fabricants de lentilles néerlandais.",
+   "Un microscope optique est composé de : le miroir, qui sert à réfléchir la lumière ambiante pour éclairer l'échantillon par en dessous ; le diaphragme, une ouverture de diamètre variable qui permet de restreindre la quantité de lumière ; la platine porte-échantillon, où l'on pose l'échantillon ; l'objectif, une lentille ou un ensemble de lentilles qui réalise le grossissement — il y a plusieurs objectifs montés sur une tourelle, correspondant à plusieurs grossissements ; et l'oculaire, une lentille formant l'image pour l'œil, que l'on peut remplacer par un appareil photographique.",
+   "Le microscope optique se base sur les lentilles pour obtenir une image agrandie de l'échantillon à observer. On dispose généralement deux lentilles convergentes alignées : il s'agit d'un système centré, composé en partie de doublets, pour corriger certaines aberrations optiques."
+  ],
+  vocab:{
+    mots:[
+      {fr:"Microscope",def:"Appareil qui permet de voir des choses très petites.",ar:"مِجْهَر"},
+      {fr:"Optique",def:"Qui concerne la lumière et les lentilles.",ar:"بَصَرِيّ"},
+      {fr:"Agrandir",def:"Rendre plus grand.",ar:"يُكَبِّر"},
+      {fr:"Image",def:"Représentation de ce que l'on voit.",ar:"صُورَة"},
+      {fr:"Observation",def:"Action d'examiner attentivement.",ar:"مُلاَحَظَة"},
+      {fr:"Biologie",def:"Science qui étudie les êtres vivants.",ar:"عِلْمُ الأَحْيَاء"},
+      {fr:"Roche",def:"Matière solide naturelle.",ar:"صَخْرَة"},
+      {fr:"Géochimie",def:"Science qui étudie la composition des roches.",ar:"الكِيمْيَاء الجِيُولُوجِيَّة"},
+      {fr:"Métallurgie",def:"Science qui étudie les métaux.",ar:"عِلْمُ المَعَادِن"},
+      {fr:"Alliage",def:"Mélange de plusieurs métaux.",ar:"سَبِيكَة"},
+      {fr:"Fabriquer",def:"Construire, produire.",ar:"يُصَنِّع"},
+      {fr:"Néerlandais",def:"Qui vient des Pays-Bas.",ar:"هُولَنْدِيّ"},
+      {fr:"Miroir",def:"Surface qui réfléchit la lumière.",ar:"مِرْآَة"},
+      {fr:"Diaphragme",def:"Ouverture qui règle la quantité de lumière.",ar:"حَاجِز ضَوْئِيّ"},
+      {fr:"Échantillon",def:"Petite quantité de matière à observer.",ar:"عَيِّنَة"},
+      {fr:"Platine",def:"Plateforme où on place l'échantillon.",ar:"مِنَصَّة"},
+      {fr:"Objectif",def:"Lentille qui grossit l'image.",ar:"عَدَسَة شَيْئِيَّة"},
+      {fr:"Oculaire",def:"Lentille près de l'œil.",ar:"عَدَسَة عَيْنِيَّة"},
+      {fr:"Cellule",def:"Petite unité de base des êtres vivants.",ar:"خَلِيَّة"},
+      {fr:"Structure",def:"Organisation, arrangement des parties.",ar:"بِنْيَة"}
+    ],
+    verbes:[
+      {fr:"Permettre",ar:"يَسْمَح"},{fr:"Étudier",ar:"يَدْرُس"},{fr:"Examiner",ar:"يَفْحَص"},
+      {fr:"Reconnaître",ar:"يَتَعَرَّف"},{fr:"Utiliser",ar:"يَسْتَخْدِم"}
+    ]
+  },
+  comprehension:[
+["Qu'est-ce qu'un microscope ?",["Un appareil optique qui agrandit l'image","Un instrument de musique","Un type de roche","Un vaccin"],0],
+["Le microscope permet surtout de voir ...",["de grands paysages","de petits détails","des étoiles","des sons"],1],
+["Le microscope est très utilisé en ...",["cuisine","biologie","musique","sport"],1],
+["En géochimie, le microscope sert à ...",["reconnaître les roches","cuisiner","voler","chanter"],0],
+["En métallurgie, le microscope sert à examiner ...",["la structure d'un métal ou d'un alliage","les étoiles","les plantes","les sons"],0],
+["Le premier microscope date de ...",["1590","1900","1750","2000"],0],
+["Le premier microscope aurait été fabriqué par ...",["Hans et Zacharias Janssen","Louis Pasteur","Marie Curie","Isaac Newton"],0],
+["Hans et Zacharias Janssen étaient ...",["des fabricants de lentilles néerlandais","des médecins français","des rois","des peintres"],0],
+["Le miroir du microscope sert à ...",["réfléchir la lumière pour éclairer l'échantillon","grossir l'image","tenir l'échantillon","protéger l'œil"],0],
+["Le diaphragme permet de ...",["restreindre la quantité de lumière","grossir l'image dix fois","nettoyer les lentilles","chauffer l'échantillon"],0],
+["On pose l'échantillon sur ...",["l'oculaire","la platine porte-échantillon","le miroir","l'objectif"],1],
+["L'objectif est ...",["une lentille qui réalise le grossissement","un bouton","un miroir","un échantillon"],0],
+["Plusieurs objectifs sont montés sur ...",["une tourelle","un trépied","un clavier","une pédale"],0],
+["L'oculaire peut être remplacé par ...",["un appareil photographique","un microphone","un thermomètre","un haut-parleur"],0],
+["Le microscope optique se base sur ...",["les lentilles","les aimants","les ondes radio","le vent"],0],
+["On dispose généralement deux lentilles ...",["convergentes et alignées","divergentes et séparées","opaques","chauffantes"],0],
+["Les doublets de lentilles servent à ...",["corriger certaines aberrations optiques","chauffer l'échantillon","produire du son","peser l'échantillon"],0],
+["La cytologie est l'étude de ...",["la cellule","le ciel","le son","le climat"],0],
+["Le mot « agrandir » signifie ...",["rendre plus grand","rendre plus petit","cacher","détruire"],0],
+["Le texte décrit surtout ...",["le fonctionnement du microscope optique","une recette de cuisine","un match de sport","un poème"],0]
+  ]
+},
+{
+  id:'vaccination', title:'La vaccination', icon:'💉', color:'#3FAE9E',
+  source:'Fiche pédagogique bilingue — sciences',
+  text:[
+   "Quand on est enfant, il y a les visites chez le médecin pour les « vaccins ». Il est nécessaire d'être vacciné pour échapper à certaines maladies.",
+   "Le mécanisme de protection : vacciner quelqu'un consiste à lui injecter un microbe tué ou affaibli, ou encore un morceau de ce microbe ou la toxine qu'il produit, afin de forcer le système immunitaire de la personne à se défendre. En faisant comme si le vrai microbe était entré dans le corps, on amène le corps à produire des défenses précisément contre ce microbe. Une fois le vaccin introduit dans l'organisme, notre corps réagit donc comme s'il était vraiment infecté.",
+   "Signes de défense et sécurité : quelquefois, le patient vacciné peut avoir de la fièvre, signe que son système immunitaire est en train de se défendre. Mais l'agent infectieux affaibli contenu dans le vaccin ne déclenche pas la maladie dont il est normalement responsable.",
+   "Types de maladies et exemples : un vaccin peut être utilisé contre des maladies dues à des virus ou à des bactéries. Protection contre les virus : les vaccins contre la rubéole, la rougeole, les oreillons, la poliomyélite ou encore la grippe préparent le corps à se défendre contre des virus. Protection contre les bactéries : les vaccins qui protègent contre des maladies dues à des bactéries sont ceux contre la coqueluche, la tuberculose, le tétanos et l'hépatite B."
+  ],
+  vocab:{
+    mots:[
+      {fr:"Vaccination",ar:"التلقيح"},{fr:"Enfant",ar:"طفل"},{fr:"Médecin",ar:"طبيب"},
+      {fr:"Maladies",ar:"أمراض"},{fr:"Mécanisme",ar:"آلية"},{fr:"Microbe",ar:"ميكروب"},
+      {fr:"Toxine",ar:"ذيفان"},{fr:"Système immunitaire",ar:"الجهاز المناعي"},{fr:"Défenses",ar:"دفاعات"},
+      {fr:"Organisme",ar:"كائن حي"},{fr:"Fièvre",ar:"حمى"},{fr:"Agent infectieux",ar:"عامل معدي"},
+      {fr:"Virus",ar:"فيروس"},{fr:"Bactéries",ar:"بكتيريا"},{fr:"Rubéole",ar:"الحميراء"},
+      {fr:"Rougeole",ar:"الحصبة"},{fr:"Coqueluche",ar:"السعال الديكي"},{fr:"Tuberculose",ar:"السل"},
+      {fr:"Tétanos",ar:"الكزاز"},{fr:"Hépatite B",ar:"التهاب الكبد ب"}
+    ],
+    verbes:[
+      {fr:"Être",ar:"يكون"},{fr:"Y avoir",ar:"يوجد"},{fr:"Échapper",ar:"يفلت من"},{fr:"Consister",ar:"يتجلى"},
+      {fr:"Injecter",ar:"يحقن"},{fr:"Tuer",ar:"يقتل"},{fr:"Affaiblir",ar:"يضعف"},{fr:"Produire",ar:"ينتج"},
+      {fr:"Forcer",ar:"يجبر"},{fr:"Se défendre",ar:"يدافع عن نفسه"},{fr:"Faire",ar:"يتظاهر"},{fr:"Entrer",ar:"يدخل"},
+      {fr:"Amener",ar:"يحفز على"},{fr:"Introduire",ar:"يدخل"},{fr:"Réagir",ar:"يستجيب"},{fr:"Avoir",ar:"يصاب ب"},
+      {fr:"Déclencher",ar:"يسبب"},{fr:"Utiliser",ar:"يستعمل"},{fr:"Protéger",ar:"يحمي"},{fr:"Préparer",ar:"يهيّئ"}
+    ]
+  },
+  comprehension:[
+["Le texte parle principalement de ...",["la vaccination","l'alimentation","le sport","la musique"],0],
+["On visite le médecin, enfant, surtout pour ...",["les vaccins","les vacances","les devoirs","le sport"],0],
+["Être vacciné permet de ...",["échapper à certaines maladies","grandir plus vite","mieux dormir","courir plus vite"],0],
+["Vacciner quelqu'un consiste à lui injecter ...",["un microbe tué ou affaibli","du sucre","de l'eau pure","un antibiotique fort"],0],
+["Le vaccin force le corps à ...",["produire des défenses","dormir plus","grandir","manger plus"],0],
+["Le corps réagit au vaccin comme s'il était ...",["vraiment infecté","en vacances","en sport","en classe"],0],
+["La fièvre après un vaccin est un signe que ...",["le système immunitaire se défend","le vaccin ne marche pas","l'enfant est guéri","le microbe a gagné"],0],
+["L'agent infectieux affaibli du vaccin ...",["ne déclenche pas la maladie","déclenche toujours la maladie","guérit instantanément","est très dangereux"],0],
+["Un vaccin peut protéger contre des maladies dues à ...",["des virus ou des bactéries","le froid uniquement","la fatigue","le bruit"],0],
+["La rubéole est causée par ...",["un virus","une bactérie","un champignon","un manque de sommeil"],0],
+["La rougeole est un exemple de maladie due à ...",["un virus","une bactérie","un manque de vitamines","un accident"],0],
+["Les oreillons sont dus à ...",["un virus","une bactérie","un microbe inconnu","aucune cause"],0],
+["La poliomyélite est causée par ...",["un virus","une bactérie","un champignon","le stress"],0],
+["La coqueluche est une maladie due à ...",["une bactérie","un virus","le froid","le manque de sommeil"],0],
+["La tuberculose est causée par ...",["une bactérie","un virus","un champignon","une carence"],0],
+["Le tétanos est dû à ...",["une bactérie","un virus","un manque de vitamines","le stress"],0],
+["L'hépatite B est due à ...",["une bactérie","un virus","une bactérie et un virus","aucun agent connu"],2],
+["Le système immunitaire sert à ...",["défendre le corps","digérer les aliments","faire circuler le sang","respirer"],0],
+["Le vaccin contient un microbe ...",["tué ou affaibli","toujours vivant et fort","inexistant","chimique uniquement"],0],
+["Le texte explique surtout ...",["le mécanisme de la vaccination","l'histoire du sport","une recette de cuisine","un poème"],0]
+  ]
+},
+{
+  id:'cellule', title:'La cellule animale', icon:'🧫', color:'#4C6FE7',
+  source:'Fiche pédagogique bilingue — biologie',
+  text:[
+   "Chez l'homme, la vie se traduit par de nombreuses propriétés telles que l'existence de mouvements, de phénomènes de synthèse, et souvent de reproduction. Ces propriétés sont retrouvées au niveau des organes, des tissus et des cellules. Ainsi, la cellule possède toutes les propriétés de l'homme. C'est la plus petite partie de la matière vivante qui, isolée, peut conserver les propriétés fondamentales de l'être vivant qui les possédait.",
+   "Au XIXe siècle, on a formulé la théorie cellulaire qui s'exprime en deux points : tout être vivant est constitué de cellules ; tout être vivant est issu de cellules.",
+   "L'étude de la cellule fait l'objet d'une science particulière : la cytologie. La cytologie est née avec l'observation au microscope faite par le hollandais Zacharia Jansen au XVIIe siècle. Elle a progressé grâce au microscope électronique, dont le grossissement permet d'étudier l'ultrastructure des organites de la cellule.",
+   "À retenir : la cellule possède toutes les propriétés de l'homme. C'est la plus petite partie de la matière vivante."
+  ],
+  vocab:{
+    mots:[
+      {fr:"La Cellule",ar:"الخلية"},{fr:"Cytologie",ar:"علم الخلايا"},{fr:"Ultrastructure",ar:"البنية الدقيقة"},
+      {fr:"Microscope",ar:"مجهر"},{fr:"Organe",ar:"عضوه"},{fr:"Tissu",ar:"نسج"},{fr:"Matière",ar:"ماده"},
+      {fr:"Théorie",ar:"نظرية"},{fr:"Reproduction",ar:"تكاثر"},{fr:"Synthèse",ar:"تركيب"},
+      {fr:"Mouvement",ar:"حركة"},{fr:"Phénomène",ar:"ظاهرة"},{fr:"Organite",ar:"عضية"},
+      {fr:"Grossissement",ar:"تكبير"},{fr:"Siècle",ar:"قرن"},{fr:"Observation",ar:"ملاحظة"},
+      {fr:"Propriété",ar:"خاصية"},{fr:"Existence",ar:"وجود"},{fr:"Être vivant",ar:"كائن حي"},{fr:"Fondamental",ar:"أساسي"}
+    ],
+    verbes:[
+      {fr:"Se traduire",ar:"يتجلى"},{fr:"Retrouver",ar:"يُعثر على"},{fr:"Posséder",ar:"يمتلك"},{fr:"Isoler",ar:"يعزل"},
+      {fr:"Conserver",ar:"يحافظ"},{fr:"Formuler",ar:"يصيغ"},{fr:"S'exprimer",ar:"يعبر عن نفسه"},{fr:"Constituer",ar:"يُكوّن"},
+      {fr:"Être issu de",ar:"ينحدر من"},{fr:"Faire l'objet de",ar:"يكون موضوعًا ل"},{fr:"Naître",ar:"يولد"},{fr:"Progresser",ar:"يتقدم"},
+      {fr:"Permettre",ar:"يسمح"},{fr:"Étudier",ar:"يدرس"},{fr:"Formuler",ar:"يصيغ"},{fr:"Conserver",ar:"يحافظ"},
+      {fr:"Isoler",ar:"يعزل"},{fr:"S'exprimer",ar:"يعبر عن نفسه"},{fr:"Retrouver",ar:"يُعثر على"},{fr:"Posséder",ar:"يمتلك"}
+    ]
+  },
+  comprehension:[
+["Le texte parle principalement de ...",["la cellule animale","les planètes","le sport","la musique"],0],
+["Chez l'homme, la vie se traduit par ...",["des mouvements, synthèses, reproduction","des couleurs uniquement","le silence","la vitesse"],0],
+["Ces propriétés se retrouvent au niveau ...",["des organes, tissus et cellules","des étoiles","du ciel","des rivières"],0],
+["La cellule possède toutes les propriétés ...",["de l'homme","du minéral","du métal","du feu"],0],
+["La cellule est ...",["la plus petite partie de la matière vivante","la plus grande partie du corps","un organe entier","un os"],0],
+["La théorie cellulaire a été formulée ...",["au XIXe siècle","au Moyen Âge","au XXe siècle","dans l'Antiquité"],0],
+["Premier point de la théorie cellulaire : tout être vivant est ...",["constitué de cellules","fait de pierre","sans forme","invisible"],0],
+["Deuxième point de la théorie cellulaire : tout être vivant est ...",["issu de cellules","né du feu","fait d'eau seulement","immobile"],0],
+["L'étude de la cellule s'appelle ...",["la cytologie","la géologie","l'astronomie","la chimie"],0],
+["La cytologie est née avec ...",["l'observation au microscope","la découverte du feu","l'invention de la roue","la peinture"],0],
+["Qui a fait cette observation au microscope ?",["Le hollandais Zacharia Jansen","Louis Pasteur","Marie Curie","Isaac Newton"],0],
+["Cette observation date du ...",["XVIIe siècle","XXe siècle","Moyen Âge","XIe siècle"],0],
+["La cytologie a progressé grâce ...",["au microscope électronique","à la télévision","au téléphone","à l'avion"],0],
+["Le microscope électronique permet d'étudier ...",["l'ultrastructure des organites de la cellule","les étoiles lointaines","les fonds marins","les volcans"],0],
+["Une science qui étudie les cellules s'appelle ...",["cytologie","astrologie","météorologie","géographie"],0],
+["Le texte compare la cellule à ...",["l'homme, car elle possède ses propriétés","une pierre","un nuage","un son"],0],
+["« Isolée », la cellule peut ...",["conserver les propriétés fondamentales du vivant","voler","chanter","disparaître"],0],
+["Le mot « organite » désigne ...",["une petite structure à l'intérieur de la cellule","un grand organe","une planète","un os"],0],
+["Le texte est surtout ...",["scientifique et biologique","poétique","historique uniquement","sportif"],0],
+["À retenir : la cellule est ...",["la plus petite partie de la matière vivante","la plus grande partie du corps","un simple liquide","une pierre"],0]
+  ]
+},
+{
+  id:'abeilles', title:'La société des abeilles', icon:'🐝', color:'#D4900A',
+  source:'Manuel de biologie — 5ᵉ',
+  text:[
+   "Chez les abeilles, l'individu est peu de chose, la famille n'existe pas, la société est tout. La survie de l'espèce passe par une organisation sociale étonnante.",
+   "Une communauté d'abeilles compte environ cinquante mille individus et comprend : une seule femelle fertile, la reine, dont la durée de vie est d'environ quatre ans ; quelques mâles ou faux bourdons, dont la vie est relativement courte — ils sont chassés ou tués en automne ; des ouvrières, femelles stériles, dont la durée de vie est d'une quarantaine de jours.",
+   "La reine est la mère de toute la colonie. Par beau temps, elle s'envole de la ruche, suivie de l'escorte bourdonnante des mâles : c'est le vol nuptial, pendant lequel elle est fécondée. Deux jours après, elle pond sans arrêt dans des alvéoles, donnant deux ou trois mille œufs par jour. De l'œuf sort une larve sans yeux ni pattes. Nourrie par les ouvrières, la larve grossit en subissant des mues. Quelques jours suffisent pour qu'elle remplisse l'alvéole. Alors, elle tisse un cocon de soie dans lequel elle se transforme en nymphe. Pendant une dizaine de jours, elle subit de nombreuses métamorphoses, à l'issue desquelles sort un insecte parfait. Cet individu ronge son couvercle, quitte sa demeure et se met au travail."
+  ],
+  vocab:{
+    mots:[
+      {fr:"Abeille",ar:"نَحْلَةُ"},{fr:"Ruche",ar:"خَلِيَّةُ النَّحْلِ"},{fr:"Reine",ar:"مَلِكَةُ النَّحْلِ"},
+      {fr:"Ouvrière",ar:"نَحْلَةُ عَامِلَةُ"},{fr:"Mâle (faux bourdon)",ar:"ذَكَرُ النَّحْلِ"},{fr:"Communauté",ar:"جَمَاعَةُ / مَجْتَمَعُ"},
+      {fr:"Société",ar:"مُجْتَمَعُ"},{fr:"Colonie",ar:"مُسْتَعْمَرَةُ"},{fr:"Individu",ar:"فَرْدُ"},{fr:"Espèce",ar:"نَوْعُ"},
+      {fr:"Fertile",ar:"خَصْبَةُ / قَادِرَةُ عَلَى الإِنْجَابِ"},{fr:"Stérile",ar:"عَقِيمَةُ"},{fr:"Féconder",ar:"يُلَقَّحُ"},
+      {fr:"Pondre",ar:"يَضَعُ البَيْضَ"},{fr:"Œuf",ar:"بَيْضَةُ"},{fr:"Larve",ar:"يَرَقَةُ"},{fr:"Nymphe",ar:"عُذْرَاءُ"},
+      {fr:"Métamorphose",ar:"تَحَوُّلُ"},{fr:"Alvéole",ar:"خَلِيَّةٌ شَمْعِيَّةُ"},{fr:"Durée de vie",ar:"مُدَّةُ الحَيَاةِ"}
+    ],
+    verbes:[
+      {fr:"Pondre",ar:"يَضَعُ البَيْضَ"},{fr:"Féconder",ar:"يُلَقِّحُ"},{fr:"Grandir",ar:"يَنْمُو"},
+      {fr:"Se transformer",ar:"يَتَحَوَّلُ"},{fr:"Travailler",ar:"يَعْمَلُ"}
+    ]
+  },
+  comprehension:[
+["Quel est le titre du texte ?",["La société des abeilles","Les fourmis","Les oiseaux","La forêt"],0],
+["Combien d'individus compte une communauté ?",["500","5000","50000","500000"],2],
+["Qui est la femelle fertile ?",["Larve","Ouvrière","Reine","Nymphe"],2],
+["Durée de vie de la reine ?",["4 ans","4 jours","40 jours","10 ans"],0],
+["Les mâles sont appelés ?",["Faux bourdons","Reines","Larves","Nymphes"],0],
+["Les ouvrières sont ?",["Mâles","Stériles","Fertiles","Géantes"],1],
+["Durée de vie des ouvrières ?",["4 jours","400 jours","40 jours","4 ans"],2],
+["Qui est la mère de la colonie ?",["Ouvrière","Larve","Reine","Nymphe"],2],
+["Comment s'appelle le vol de fécondation ?",["Vol royal","Vol nuptial","Vol rapide","Vol d'hiver"],1],
+["Où la reine pond-elle ?",["Dans des alvéoles","Dans l'eau","Sous terre","Sur les feuilles"],0],
+["Combien d'œufs par jour ?",["30","300","3000","30000"],2],
+["Que sort-il de l'œuf ?",["Une reine","Une larve","Une nymphe","Un mâle"],1],
+["La larve possède ?",["Des ailes","Des yeux","Des pattes","Ni yeux ni pattes"],3],
+["Qui nourrit la larve ?",["La reine","Les mâles","Les ouvrières","Les oiseaux"],2],
+["Que tisse la larve ?",["Un nid","Un cocon de soie","Une toile","Une ruche"],1],
+["En quoi se transforme-t-elle ?",["Nymphe","Poisson","Oiseau","Fourmi"],0],
+["Combien de jours dure la métamorphose ?",["1","3","10 environ","100"],2],
+["Que devient-elle à la fin ?",["Un insecte parfait","Une fleur","Un arbre","Une reine"],0],
+["Que fait l'abeille adulte ?",["Elle dort","Elle nage","Elle travaille","Elle disparaît"],2],
+["Le texte provient d'un ?",["Roman","Journal","Manuel de biologie","Poème"],2]
+  ]
+}
+];
+
+/* ============================================================
+   ÉTAT / NAVIGATION
+   ============================================================ */
+let state = { view:'home', moduleId:null, tab:'texte', vocabCat:'mots', quiz:null };
+
+function go(view, extra){ state = Object.assign(state, {view}, extra||{}); render(); }
+function getModule(id){ return MODULES.find(m=>m.id===id); }
+
+/* ---------- quiz engine (comprehension quizzes: form with all questions at once) ---------- */
+
+function renderQuizPanel(mod, questions, title){
+  let answers = new Array(questions.length).fill(null);
+  const panel = document.createElement('div');
+  panel.className='panel';
+  panel.style.setProperty('--accent', mod.color);
+
+  const prog = document.createElement('div');
+  prog.className='progress';
+  prog.textContent = title+' · '+questions.length+' questions';
+  panel.appendChild(prog);
+
+  const form = document.createElement('div');
+  questions.forEach((q,i)=>{
+    const box = document.createElement('div');
+    box.className='question'; box.id='q'+i;
+    const isArabicOptions = q[3]===true;
+    let h = '<b>'+(i+1)+'. '+q[0]+'</b>';
+    q[1].forEach((opt,j)=>{
+      h += `<label class="option"><input type="radio" name="q${i}" value="${j}"> <span${isArabicOptions?' class="arabic"':''}>${opt}</span></label>`;
+    });
+    box.innerHTML = h;
+    form.appendChild(box);
+  });
+  panel.appendChild(form);
+
+  const actions = document.createElement('div');
+  actions.className='actions';
+  const checkBtn = document.createElement('button');
+  checkBtn.className='btn'; checkBtn.style.background=mod.color; checkBtn.textContent='Vérifier le résultat';
+  const restartBtn = document.createElement('button');
+  restartBtn.className='btn ghost'; restartBtn.textContent='Recommencer';
+  actions.appendChild(checkBtn); actions.appendChild(restartBtn);
+  panel.appendChild(actions);
+
+  const resultDiv = document.createElement('div');
+  panel.appendChild(resultDiv);
+
+  checkBtn.onclick = ()=>{
+    let score=0;
+    questions.forEach((q,i)=>{
+      const box = document.getElementById('q'+i);
+      box.classList.remove('correct','wrong');
+      const sel = form.querySelector(`input[name="q${i}"]:checked`);
+      if(sel && Number(sel.value)===q[2]){score++;box.classList.add('correct');}
+      else{box.classList.add('wrong');}
+    });
+    resultDiv.innerHTML = `<div class="result-stamp" style="--accent:${mod.color}">
+      <div class="score">${score} / ${questions.length}</div>
+      <div class="msg">${score===questions.length ? 'Parfait !' : score >= questions.length*0.6 ? 'Bien joué' : 'Continue à réviser'}</div>
+    </div>`;
+  };
+  restartBtn.onclick = ()=>{ render(); };
+
+  return panel;
+}
+
+function makeQuizLauncher(mod, cat, emoji, label, count){
+  const b=document.createElement('button');
+  b.className='cat-btn'+(cat==='recap'?'':''); // reuse existing look
+  b.style.setProperty('--accent', mod.color);
+  b.style.display='flex'; b.style.alignItems='center'; b.style.gap='12px'; b.style.width='100%';
+  b.innerHTML = `<span style="font-size:26px">${emoji}</span>
+    <span style="text-align:left"><b style="display:block;font-size:14.5px">${label}</b>
+    <span style="font-size:11.5px;color:var(--muted);font-family:'Space Mono',monospace">${count} questions</span></span>`;
+  b.onclick = ()=> go('vocabQuiz', {vocabQuizCat:cat});
+  return b;
+}
+
+/* ============================================================
+   MOTEUR DE QUIZ VOCABULAIRE — cosmique, une question à la fois
+   ============================================================ */
+function vqShuffle(arr){
+  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+  return arr;
+}
+function vqItemQs(item){
+  return [
+    {fr:item.fr, ar:item.ar, correct:item.ar, qtype:'arabic', prompt:'Quelle est la traduction en arabe de ce mot ?'},
+    {fr:item.fr, ar:item.ar, correct:item.fr, qtype:'french', prompt:'Quel est le mot français correspondant ?'}
+  ];
+}
+function vqBuildQuestions(mod, cat){
+  const mots = mod.vocab.mots||[], verbes = mod.vocab.verbes||[];
+  let base;
+  if(cat==='mots') base=mots; else if(cat==='verbes') base=verbes; else base=mots.concat(verbes);
+  let qs=[]; base.forEach(i=>qs.push(...vqItemQs(i)));
+  return vqShuffle(qs);
+}
+function vqSpeak(text){
+  if(!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang='fr-FR'; u.rate=0.85;
+  window.speechSynthesis.speak(u);
+}
+function vqPlayCorrect(){
+  try{
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    [523.25,659.25,783.99].forEach((freq,i)=>{
+      const osc=ctx.createOscillator(), gain=ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type='sine'; osc.frequency.value=freq;
+      gain.gain.setValueAtTime(0.3, ctx.currentTime+i*0.12);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+i*0.12+0.3);
+      osc.start(ctx.currentTime+i*0.12); osc.stop(ctx.currentTime+i*0.12+0.3);
+    });
+  }catch(e){}
+}
+function vqPlayWrong(){
+  try{
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const osc=ctx.createOscillator(), gain=ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type='sawtooth';
+    osc.frequency.setValueAtTime(200, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime+0.3);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.35);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.35);
+  }catch(e){}
+}
+function vqStamp(container, emoji){
+  const s=document.createElement('div'); s.className='vq-stamp'; s.textContent=emoji;
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),800);
+}
+function vqConfetti(){
+  const colors=['#2ec4b6','#4d96ff','#ffd166','#06d6a0','#ef476f','#ffffff'];
+  for(let i=0;i<50;i++) setTimeout(()=>{
+    const p=document.createElement('div'); p.className='vq-confetti';
+    p.style.left=Math.random()*100+'vw';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration=(Math.random()*2+2)+'s';
+    p.style.animationDelay=Math.random()*0.5+'s';
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),4000);
+  }, i*30);
+}
+function vqCreateStars(container){
+  for(let i=0;i<50;i++){
+    const s=document.createElement('div'); s.className='vq-star';
+    s.style.left=Math.random()*100+'%'; s.style.top=Math.random()*100+'%';
+    s.style.setProperty('--d',(Math.random()*3+2)+'s');
+    s.style.setProperty('--del',(Math.random()*3)+'s');
+    const sz=Math.random()*2+1;
+    s.style.width=sz+'px'; s.style.height=sz+'px';
+    container.appendChild(s);
+  }
+}
+
+function initCosmicQuiz(mod, cat, root, onBack){
+  root.innerHTML = `
+    <div class="vq-bgglow"></div>
+    <div class="vq-stars" id="vqStars"></div>
+    <div class="vq-content">
+      <div class="vq-header">
+        <button class="vq-back" id="vqBack">←</button>
+        <div class="vq-score">⭐ <span id="vqScoreVal">0</span></div>
+        <div class="vq-counter" id="vqCounter">1 / 1</div>
+      </div>
+      <div class="vq-progress-wrap"><div class="vq-progress-fill" id="vqProgressFill" style="width:5%"></div></div>
+      <div id="vqQuizArea"></div>
+    </div>`;
+  root.style.setProperty('--vq-accent', mod.color);
+  vqCreateStars(root.querySelector('#vqStars'));
+  root.querySelector('#vqBack').onclick = ()=>{ window.speechSynthesis && window.speechSynthesis.cancel(); onBack(); };
+
+  const questions = vqBuildQuestions(mod, cat);
+  const scoreVal = root.querySelector('#vqScoreVal');
+  const counter = root.querySelector('#vqCounter');
+  const progressFill = root.querySelector('#vqProgressFill');
+  const quizArea = root.querySelector('#vqQuizArea');
+  let idx=0, score=0, answered=false;
+
+  function loadQuestion(){
+    if(idx>=questions.length){ showResult(); return; }
+    answered=false;
+    const q = questions[idx];
+    const displayWord = q.qtype==='arabic' ? q.fr : q.ar;
+    counter.textContent = (idx+1)+' / '+questions.length;
+    scoreVal.textContent = score;
+    progressFill.style.width = Math.max((idx/questions.length)*100,5)+'%';
+
+    quizArea.innerHTML = `
+      <div class="vq-qcard" id="vqCard">
+        <div class="vq-badge">${cat==='mots'?'Mots':cat==='verbes'?'Verbes':'Récap'}</div>
+        <div>
+          ${q.qtype==='arabic' ? '<button class="vq-speaker" id="vqSpeaker" title="Écouter">🔊</button>' : ''}
+          <span class="vq-word" id="vqWordEl">${displayWord}</span>
+        </div>
+        <p class="vq-prompt">${q.prompt}</p>
+      </div>
+      <div class="vq-options" id="vqOptions"></div>
+      <div class="vq-explain" id="vqExplain"></div>
+      <button class="vq-next" id="vqNext">Question suivante →</button>`;
+
+    if(q.qtype==='arabic'){
+      quizArea.querySelector('#vqSpeaker').onclick=()=>vqSpeak(q.fr);
+      quizArea.querySelector('#vqWordEl').onclick=()=>vqSpeak(q.fr);
+    } else {
+      quizArea.querySelector('#vqWordEl').classList.add('arabic');
+    }
+
+    // options pool: draw wrong answers from combined mots+verbes of this module
+    const combined = (mod.vocab.mots||[]).concat(mod.vocab.verbes||[]);
+    let optsSource, correctVal=q.correct;
+    if(q.qtype==='arabic'){
+      optsSource = vqShuffle(combined.filter(i=>i.ar!==q.correct).map(i=>i.ar)).slice(0,3);
+    } else {
+      optsSource = vqShuffle(combined.filter(i=>i.fr!==q.correct).map(i=>i.fr)).slice(0,3);
+    }
+    const opts = vqShuffle(optsSource.concat([correctVal]));
+
+    const optionsEl = quizArea.querySelector('#vqOptions');
+    opts.forEach(opt=>{
+      const btn=document.createElement('button');
+      btn.className='vq-opt'+(q.qtype==='french'?' arabic':'');
+      btn.textContent=opt;
+      btn.onclick=()=>selectAnswer(btn,opt,q);
+      optionsEl.appendChild(btn);
+    });
+
+    quizArea.querySelector('#vqNext').onclick=()=>{ idx++; loadQuestion(); };
+    if(q.qtype==='arabic') setTimeout(()=>vqSpeak(q.fr),300);
+  }
+
+  function selectAnswer(btn, chosen, q){
+    if(answered) return;
+    answered=true;
+    const isCorrect = chosen===q.correct;
+    quizArea.querySelectorAll('.vq-opt').forEach(b=>{
+      b.disabled=true;
+      if(b.textContent===q.correct) b.classList.add('correct');
+    });
+    if(!isCorrect){ btn.classList.add('wrong'); vqPlayWrong(); vqStamp(root,'❌'); }
+    else{ score++; scoreVal.textContent=score; vqPlayCorrect(); vqStamp(root,'✅'); }
+    const ex = quizArea.querySelector('#vqExplain');
+    if(q.qtype==='arabic'){
+      ex.innerHTML = `<b>${q.fr}</b> se traduit par <span class="ok arabic">${q.ar}</span>`;
+    } else {
+      ex.innerHTML = `<b class="arabic">${q.ar}</b> se dit <span class="ok">${q.fr}</span> en français`;
+    }
+    ex.classList.add('visible');
+    quizArea.querySelector('#vqNext').classList.add('visible');
+  }
+
+  function showResult(){
+    const total=questions.length, pct=Math.round((score/total)*100);
+    let icon,title,stars,msg;
+    if(pct>=90){icon='🏆';title='Excellent !';stars='⭐⭐⭐⭐⭐';msg='Performance exceptionnelle, continue comme ça !';vqConfetti();}
+    else if(pct>=75){icon='🥇';title='Très bien !';stars='⭐⭐⭐⭐';msg='Beau résultat, tu maîtrises bien ce vocabulaire.';}
+    else if(pct>=55){icon='🥈';title='Bien joué !';stars='⭐⭐⭐';msg='Bonne progression, revois quelques mots et recommence.';}
+    else if(pct>=35){icon='🥉';title='Continue !';stars='⭐⭐';msg='Ne lâche rien, la révision est la clé du succès.';}
+    else{icon='📚';title='À revoir';stars='⭐';msg='Relis la fiche de vocabulaire puis retente ta chance.';}
+    progressFill.style.width='100%';
+    quizArea.innerHTML = `
+      <div class="vq-result">
+        <span class="icon">${icon}</span>
+        <h2 class="title">${title}</h2>
+        <div class="score">${score} / ${total}</div>
+        <div class="pct">${pct}% de bonnes réponses</div>
+        <div class="rating"><div class="vq-stars-line">${stars}</div><div>${msg}</div></div>
+        <div class="vq-result-btns">
+          <button class="vq-retry" id="vqRetry">🔄 Recommencer</button>
+          <button class="vq-home" id="vqHomeBtn">🏠 Retour au vocabulaire</button>
+        </div>
+      </div>`;
+    quizArea.querySelector('#vqRetry').onclick=()=>{ idx=0; score=0; loadQuestion(); };
+    quizArea.querySelector('#vqHomeBtn').onclick=()=>{ window.speechSynthesis && window.speechSynthesis.cancel(); onBack(); };
+  }
+
+  loadQuestion();
+}
+
+/* ============================================================
+   RENDU
+   ============================================================ */
+function render(){
+  const app = document.getElementById('app');
+  app.innerHTML='';
+
+  if(state.view==='home'){
+    const top = document.createElement('div');
+    top.className='top';
+    top.innerHTML = `<div class="brand"><span class="mark">FR·AR</span><h1>Fiches &amp; Quiz</h1></div>`;
+    app.appendChild(top);
+
+    const note = document.createElement('p');
+    note.className='catalog-note';
+    note.textContent = MODULES.length+' fiches classées — texte, vocabulaire et compréhension';
+    app.appendChild(note);
+
+    const grid = document.createElement('div');
+    grid.className='grid';
+    MODULES.forEach(mod=>{
+      const card = document.createElement('div');
+      card.className='card';
+      card.style.setProperty('--tab-color', mod.color);
+      card.innerHTML = `
+        <div class="card-top">
+          <div>
+            <div class="emoji">${mod.icon}</div>
+            <div class="tag" style="color:${mod.color}">${mod.source}</div>
+            <h2>${mod.title}</h2>
+            <p>Texte · vocabulaire · compréhension</p>
+          </div>
+          <div class="chevron">›</div>
+        </div>`;
+      card.onclick = ()=> go('module', {moduleId:mod.id, tab:'texte'});
+      grid.appendChild(card);
+    });
+    app.appendChild(grid);
+    return;
+  }
+
+  if(state.view==='module'){
+    const mod = getModule(state.moduleId);
+    const top = document.createElement('div');
+    top.className='top';
+    top.innerHTML = `<div class="brand"><span class="mark">FR·AR</span></div>`;
+    const back = document.createElement('button');
+    back.className='backbtn'; back.textContent='← Modules';
+    back.onclick = ()=> go('home');
+    top.appendChild(back);
+    app.appendChild(top);
+
+    const head = document.createElement('div');
+    head.className='module-head';
+    head.innerHTML = `<div class="tag" style="--accent:${mod.color};color:${mod.color}">${mod.icon} ${mod.source}</div><h1>${mod.title}</h1>`;
+    app.appendChild(head);
+
+    const tabs = document.createElement('div');
+    tabs.className='tabs';
+    const tabDefs = [['texte','📖 Texte'],['vocabulaire','📝 Vocabulaire'],['comprehension','🧠 Compréhension']];
+    tabDefs.forEach(([key,label])=>{
+      const b = document.createElement('button');
+      b.className='tab'+(state.tab===key?' active':'');
+      b.textContent = label;
+      b.style.setProperty('--accent', mod.color);
+      b.onclick = ()=> go('module', {tab:key, vocabCat:'mots'});
+      tabs.appendChild(b);
+    });
+    app.appendChild(tabs);
+
+    if(state.tab==='texte'){
+      const panel = document.createElement('div');
+      panel.className='panel reading';
+      panel.style.setProperty('--accent', mod.color);
+      let html='';
+      mod.text.forEach(block=>{
+        if(block==='__TABLE_GRAISSES__' && mod.table){
+          html += '<h3>Tableau des graisses</h3><table><tr>'+mod.table.headers.map(h=>`<th>${h}</th>`).join('')+'</tr>';
+          mod.table.rows.forEach(r=>{ html+='<tr>'+r.map(c=>`<td>${c}</td>`).join('')+'</tr>'; });
+          html+='</table>';
+        } else {
+          html += `<p>${block}</p>`;
+        }
+      });
+      panel.innerHTML = html;
+      app.appendChild(panel);
+      return;
+    }
+
+    if(state.tab==='vocabulaire'){
+      const panel = document.createElement('div');
+      panel.className='panel';
+      panel.style.setProperty('--accent', mod.color);
+
+      const cats = document.createElement('div');
+      cats.className='vocab-cats';
+      const hasMots = mod.vocab.mots && mod.vocab.mots.length>0;
+      const hasVerbes = mod.vocab.verbes && mod.vocab.verbes.length>0;
+      if(hasMots){
+        const b=document.createElement('button');
+        b.className='cat-btn'+(state.vocabCat==='mots'?' active':'');
+        b.style.setProperty('--accent',mod.color);
+        b.innerHTML = `<b>Mots</b><span>${mod.vocab.mots.length} termes</span>`;
+        b.onclick=()=>go('module',{vocabCat:'mots'});
+        cats.appendChild(b);
+      }
+      if(hasVerbes){
+        const b=document.createElement('button');
+        b.className='cat-btn'+(state.vocabCat==='verbes'?' active':'');
+        b.style.setProperty('--accent',mod.color);
+        b.innerHTML = `<b>Verbes</b><span>${mod.vocab.verbes.length} termes</span>`;
+        b.onclick=()=>go('module',{vocabCat:'verbes'});
+        cats.appendChild(b);
+      }
+      panel.appendChild(cats);
+
+      const currentList = state.vocabCat==='verbes' ? mod.vocab.verbes : mod.vocab.mots;
+
+      const ul = document.createElement('ul');
+      ul.className='vocab-list';
+      currentList.forEach(item=>{
+        const li = document.createElement('li');
+        li.innerHTML = `<span><span class="fr">${item.fr}</span>${item.def?`<span class="def">${item.def}</span>`:''}</span><span class="ar arabic" style="color:${mod.color}">${item.ar}</span>`;
+        ul.appendChild(li);
+      });
+      panel.appendChild(ul);
+
+      const quizSection = document.createElement('div');
+      quizSection.style.marginTop='22px';
+      const qTitle = document.createElement('div');
+      qTitle.className='reading';
+      qTitle.innerHTML = `<h3 style="margin-top:0">Quiz interactif</h3>`;
+      quizSection.appendChild(qTitle);
+
+      const catsRow = document.createElement('div');
+      catsRow.style.display='grid'; catsRow.style.gap='10px';
+      if(hasMots){
+        catsRow.appendChild(makeQuizLauncher(mod,'mots','📘','Mots',mod.vocab.mots.length*2));
+      }
+      if(hasVerbes){
+        catsRow.appendChild(makeQuizLauncher(mod,'verbes','⚙️','Verbes',mod.vocab.verbes.length*2));
+      }
+      if(hasMots || hasVerbes){
+        const total=(mod.vocab.mots?mod.vocab.mots.length:0)+(mod.vocab.verbes?mod.vocab.verbes.length:0);
+        catsRow.appendChild(makeQuizLauncher(mod,'recap','🌟','Récap — tout mélanger',total*2));
+      }
+      quizSection.appendChild(catsRow);
+      panel.appendChild(quizSection);
+
+      app.appendChild(panel);
+      return;
+    }
+
+    if(state.tab==='comprehension'){
+      const panel = renderQuizPanel(mod, mod.comprehension, 'Quiz de compréhension');
+      app.appendChild(panel);
+      return;
+    }
+  }
+
+  if(state.view==='vocabQuiz'){
+    const mod = getModule(state.moduleId);
+    const root = document.createElement('div');
+    root.className='vq-root';
+    app.appendChild(root);
+    initCosmicQuiz(mod, state.vocabQuizCat||'mots', root, ()=> go('module',{tab:'vocabulaire'}));
+    return;
+  }
+}
+
+render();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
