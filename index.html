@@ -237,27 +237,6 @@ body{
 .vq-confetti{position:fixed;width:9px;height:9px;top:-10px;animation:vqConfettiFall linear forwards;z-index:1000;
   pointer-events:none;border-radius:2px}
 @keyframes vqConfettiFall{to{transform:translateY(105vh) rotate(720deg);opacity:0}}
-
-/* ---------- bouton et modale d'installation PWA ---------- */
-.install-btn{
-  font-family:'Space Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
-  background:#F4EFE2;color:var(--canvas);border:none;border-radius:20px;padding:9px 14px;
-  cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0;
-}
-.install-modal-backdrop{
-  position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:2000;display:flex;
-  align-items:flex-end;justify-content:center;
-}
-.install-modal{
-  background:var(--paper);border-radius:16px 16px 0 0;padding:24px 22px 28px;max-width:480px;width:100%;
-  max-height:80vh;overflow-y:auto;
-}
-.install-modal h3{margin:0 0 14px;font-size:17px}
-.install-modal ol{margin:0 0 16px;padding-left:20px;font-size:14.5px;line-height:1.9}
-.install-modal .close-btn{
-  width:100%;padding:12px;border:none;border-radius:20px;background:var(--canvas);color:#fff;
-  font-family:'Space Mono',monospace;font-size:13px;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;
-}
 </style>
 </head>
 <body>
@@ -736,6 +715,185 @@ const MODULES = [
 ["Internet a transformé les modes de communication, d'apprentissage et de ...",["travail","voyage","sport","jeu"],0],
 ["Le type du texte est ...",["narratif","poétique","expositif","théâtral"],2]
   ]
+},
+{
+  id:'cycle-eau', title:"Le cycle de l'eau", icon:'💧', color:'#1565C0',
+  source:'Fiche pédagogique — sciences',
+  text:[
+   "L'eau est une ressource indispensable à la vie sur Terre. Elle circule en permanence dans la nature grâce à un phénomène naturel appelé le cycle de l'eau. Ce cycle assure le renouvellement continu des réserves d'eau de la planète.",
+   "Sous l'effet de la chaleur du soleil, l'eau des océans, des mers, des lacs et des rivières s'évapore et se transforme en vapeur d'eau. Les plantes participent également à ce phénomène en libérant de la vapeur d'eau dans l'atmosphère par un processus appelé transpiration.",
+   "Lorsque la vapeur d'eau s'élève dans les couches plus froides de l'atmosphère, elle se condense en fines gouttelettes qui forment les nuages. Lorsque ces gouttelettes deviennent trop lourdes, elles retombent sur la Terre sous forme de précipitations : pluie, neige ou grêle.",
+   "Une partie de cette eau s'infiltre dans le sol et alimente les nappes souterraines. Une autre partie s'écoule vers les cours d'eau, les lacs et les océans. L'eau est alors de nouveau chauffée par le soleil, et le cycle recommence.",
+   "Le cycle de l'eau joue un rôle essentiel dans l'équilibre des écosystèmes et dans la répartition de l'eau douce sur la planète. Il constitue l'un des phénomènes naturels les plus importants pour la vie.",
+   "Les étapes du cycle de l'eau : 1. Évaporation — 2. Condensation — 3. Précipitations — 4. Infiltration et écoulement."
+  ],
+  vocab:{
+    mots:[
+      {fr:"Le cycle de l'eau",ar:"دورة المياه"},{fr:"Une ressource",ar:"مورد"},
+      {fr:"Le renouvellement",ar:"التجدد"},{fr:"Les réserves d'eau",ar:"مخزون المياه"},
+      {fr:"La vapeur d'eau",ar:"بخار الماء"},{fr:"L'atmosphère",ar:"الغلاف الجوي"},
+      {fr:"La transpiration",ar:"النتح"},{fr:"La condensation",ar:"التكاثف"},
+      {fr:"Des gouttelettes",ar:"قطيرات"},{fr:"Les nuages",ar:"السحب / الغيوم"},
+      {fr:"Les précipitations",ar:"الهطول"},{fr:"La pluie",ar:"المطر"},
+      {fr:"La grêle",ar:"البرد"},{fr:"La neige",ar:"الثلج"},
+      {fr:"L'infiltration",ar:"التسرب / الرشح"},{fr:"Les nappes souterraines",ar:"المياه الجوفية"},
+      {fr:"L'écoulement",ar:"الجريان"},{fr:"Les cours d'eau",ar:"المجاري المائية"},
+      {fr:"L'équilibre",ar:"التوازن"},{fr:"Les écosystèmes",ar:"الأنظمة البيئية"}
+    ],
+    verbes:[
+      {fr:"Circuler",ar:"الدوران / الجريان"},{fr:"Assurer",ar:"الضمان"},
+      {fr:"S'évaporer",ar:"التبخر"},{fr:"Se transformer",ar:"التحول"},
+      {fr:"Participer",ar:"المشاركة"},{fr:"Libérer",ar:"التحرير / الإطلاق"},
+      {fr:"S'élever",ar:"الارتفاع / الصعود"},{fr:"Se condenser",ar:"التكاثف"},
+      {fr:"Devenir",ar:"الصيرورة"},{fr:"Former",ar:"التشكيل / التكوين"},
+      {fr:"Retomber",ar:"السقوط مجدداً"},{fr:"S'infiltrer",ar:"التسرب"},
+      {fr:"Alimenter",ar:"التغذية"},{fr:"S'écouler",ar:"الجريان / التدفق"},
+      {fr:"Chauffer",ar:"التسخين"},{fr:"Recommencer",ar:"البدء من جديد"},
+      {fr:"Jouer [un rôle]",ar:"أداء [دور]"},{fr:"Répartir",ar:"التوزيع"},
+      {fr:"Constituer",ar:"التمثيل / التشكيل"},{fr:"Appeler",ar:"التسمية"}
+    ]
+  },
+  comprehension:[
+["Le cycle de l'eau est un phénomène ...",["Artificiel","Naturel","Industriel","Chimique"],1],
+["L'eau est indispensable à ...",["La vie","La pierre","Le métal","Le sable"],0],
+["La chaleur responsable provient du ...",["Vent","Soleil","Sol","Nuage"],1],
+["L'eau se transforme en ...",["Glace","Vapeur d'eau","Sable","Sel"],1],
+["Les plantes participent grâce à ...",["Respiration","Transpiration","Photosynthèse seule","Nutrition"],1],
+["La vapeur d'eau forme ...",["Montagnes","Nuages","Roches","Forêts"],1],
+["La condensation produit ...",["Gouttelettes","Flammes","Cristaux","Poussières"],0],
+["Les précipitations peuvent être ...",["Pluie","Neige","Grêle","Toutes les réponses"],3],
+["L'eau s'infiltre dans ...",["Le ciel","Le sol","Le feu","Les étoiles"],1],
+["Les nappes sont ...",["Souterraines","Aériennes","Marines","Volantes"],0],
+["Une partie de l'eau s'écoule vers ...",["Les cours d'eau","Le désert","Les maisons","Les routes"],0],
+["Le cycle recommence grâce au ...",["Vent","Soleil","Feu","Gel"],1],
+["Le cycle assure le ...",["Renouvellement de l'eau","Transport","Commerce","Tourisme"],0],
+["Le cycle joue un rôle dans ...",["Les écosystèmes","Les machines","Les routes","Les usines"],0],
+["L'eau circule en permanence dans ...",["La nature","Les livres","Les écoles","Les villes"],0],
+["La vapeur s'élève dans ...",["L'atmosphère","Le sol","La mer","La forêt"],0],
+["Les nuages se forment après ...",["Condensation","Évaporation","Infiltration","Écoulement"],0],
+["Combien d'étapes sont citées ?",["2","3","4","5"],2],
+["La pluie est une ...",["Précipitation","Évaporation","Condensation","Transpiration"],0],
+["Le texte traite principalement de ...",["L'électricité","Le cycle de l'eau","Les volcans","La pollution"],1]
+  ]
+},
+{
+  id:'ecosysteme', title:"Les relations dans un écosystème", icon:'🌿', color:'#2E7D32',
+  source:'Fiche pédagogique — sciences',
+  text:[
+   "Lorsque les biologistes étudient un milieu, ils utilisent le terme d'écosystème qui désigne d'une part toutes les espèces animales et végétales qui habitent un même lieu, d'autre part les relations qu'elles établissent entre elles et avec le milieu.",
+   "Dans un milieu donné, il s'établit un véritable réseau de relations alimentaires, appelé réseau trophique (du grec « trophos » qui signifie nourriture). Dans un réseau, tous les animaux se nourrissent d'autres animaux ou de plantes. Un réseau est constitué de plusieurs chaînes alimentaires ; une chaîne alimentaire est une relation simple entre des êtres vivants dans laquelle chaque individu mange celui qui le précède et sert de nourriture à celui qui le suit ; cette organisation permet un transfert de matière et d'énergie d'un être à un autre.",
+   "Le nombre de maillons peut varier d'une chaîne alimentaire à une autre, mais chaque chaîne débute toujours par un végétal chlorophyllien. Ces végétaux sont appelés producteurs parce qu'ils produisent de la matière organique à partir d'éléments inorganiques. Cette matière est consommée par les autres êtres vivants appelés pour cette raison des consommateurs.",
+   "Dans tous les milieux, toute une faune d'animaux de petite taille et une flore de bactéries et de champignons se nourrissent de matière organique morte (cadavres d'animaux, restes de végétaux) dont ils provoquent la décomposition. Ces décomposeurs procèdent à la minéralisation de cette matière organique, assurant ainsi son recyclage en sels minéraux qui servent de nourriture aux plantes chlorophylliennes.",
+   "Idée principale : les relations alimentaires permettent le transfert et le recyclage de la matière et de l'énergie au sein d'un écosystème."
+  ],
+  vocab:{
+    mots:[
+      {fr:"Un écosystème",ar:"نظام بيئي"},{fr:"Une espèce",ar:"نوع"},
+      {fr:"Un réseau trophique",ar:"شبكة غذائية"},{fr:"Une chaîne alimentaire",ar:"سلسلة غذائية"},
+      {fr:"La matière organique",ar:"مادة عضوية"},{fr:"L'énergie",ar:"طاقة"},
+      {fr:"Un maillon",ar:"حلقة"},{fr:"Un végétal chlorophyllien",ar:"نبات بخضوري"},
+      {fr:"Un producteur",ar:"منتج"},{fr:"Un consommateur",ar:"مستهلك"},
+      {fr:"Un décomposeur",ar:"محلل"},{fr:"La faune",ar:"حيوانات"},
+      {fr:"La flore",ar:"نباتات"},{fr:"La minéralisation",ar:"معدنة"},
+      {fr:"Un sel minéral",ar:"ملح معدني"},{fr:"Un cadavre",ar:"جثة"},
+      {fr:"Les restes de végétaux",ar:"بقايا النباتات"},{fr:"Les éléments inorganiques",ar:"عناصر غير عضوية"},
+      {fr:"La biodiversité",ar:"تنوع بيولوجي"},{fr:"Un habitat naturel",ar:"موطن طبيعي"}
+    ],
+    verbes:[
+      {fr:"Étudier",ar:"يدرس"},{fr:"Désigner",ar:"يدل على"},
+      {fr:"Habiter",ar:"يعيش"},{fr:"Établir",ar:"يؤسس"},
+      {fr:"Se nourrir (de)",ar:"يتغذى"},{fr:"Signifier",ar:"يعني"},
+      {fr:"Constituer",ar:"يكوّن"},{fr:"Précéder",ar:"يسبق"},
+      {fr:"Suivre",ar:"يتبع"},{fr:"Permettre",ar:"يسمح"},
+      {fr:"Transférer",ar:"ينقل"},{fr:"Varier",ar:"يتنوع"},
+      {fr:"Débuter",ar:"يبدأ"},{fr:"Produire",ar:"ينتج"},
+      {fr:"Consommer",ar:"يستهلك"},{fr:"Provoquer",ar:"يسبب"},
+      {fr:"Procéder",ar:"يقوم"},{fr:"Favoriser",ar:"يعزز"},
+      {fr:"Influencer",ar:"يؤثر"},{fr:"Dépendre (de)",ar:"يعتمد على"}
+    ]
+  },
+  comprehension:[
+["Qu'est-ce qu'un écosystème ?",["Ensemble d'espèces et relations","Une planète","Une ville","Une machine"],0],
+["Quel réseau est lié à l'alimentation ?",["Réseau trophique","Réseau routier","Internet","Réseau électrique"],0],
+["Que signifie « trophos » en grec ?",["Nourriture","Eau","Air","Soleil"],0],
+["Les animaux se nourrissent de ...",["Animaux ou plantes","Pierres","Métaux","Nuages"],0],
+["Une chaîne alimentaire est ...",["Une relation simple alimentaire","Une route","Un climat","Une forêt"],0],
+["Dans une chaîne, chaque individu mange ...",["Celui qui le précède","Celui qui le suit","Personne","Tout le monde"],0],
+["Une chaîne alimentaire permet un transfert de ...",["Matière et énergie","Argent","Lumière","Vent"],0],
+["Chaque chaîne alimentaire débute par ...",["Un végétal chlorophyllien","Un lion","Un champignon","Une bactérie"],0],
+["Les végétaux chlorophylliens sont appelés ...",["Producteurs","Consommateurs","Prédateurs","Décomposeurs"],0],
+["Pourquoi les appelle-t-on producteurs ?",["Ils produisent la matière organique","Ils mangent tout","Ils chassent","Ils volent"],0],
+["La matière organique est consommée par ...",["Les consommateurs","Les producteurs","Les roches","Les rivières"],0],
+["Qui décompose les cadavres et les restes de végétaux ?",["Les décomposeurs","Les producteurs","Les prédateurs","Les poissons"],0],
+["Les bactéries font partie de ...",["La flore décomposeuse","Les mammifères","Les oiseaux","Les reptiles"],0],
+["Les champignons se nourrissent de ...",["Matière organique morte","Métal","Eau pure","Air"],0],
+["La minéralisation produit ...",["Des sels minéraux","Du plastique","Du gaz","Du bois"],0],
+["Les sels minéraux servent de nourriture aux ...",["Plantes chlorophylliennes","Voitures","Roches","Nuages"],0],
+["Le recyclage de la matière organique est assuré par ...",["Les décomposeurs","Les producteurs","Les consommateurs","Les poissons"],0],
+["Que deviennent les cadavres d'animaux et les restes de végétaux ?",["Ils sont décomposés","Ils deviennent des producteurs","Ils disparaissent sans trace","Ils se transforment en eau"],0],
+["Les éléments inorganiques sont utilisés par les producteurs pour ...",["Produire de la matière organique","Fabriquer du plastique","Se déplacer","Rien de particulier"],0],
+["L'idée principale du texte concerne ...",["Les relations alimentaires dans un écosystème","L'astronomie","Le transport","Les graisses"],0]
+  ]
+},
+{
+  id:'fusee', title:"La fusée : une réalisation scientifique exceptionnelle", icon:'🚀', color:'#5E35B1',
+  source:'Fiche pédagogique bilingue — sciences',
+  text:[
+   "La fusée est l'une des plus grandes réalisations scientifiques et techniques de notre époque. Il s'agit d'un véhicule spatial conçu pour transporter des charges utiles, des satellites ou des astronautes dans l'espace grâce à la force produite par ses moteurs.",
+   "Les premières fusées modernes ont été développées au cours du XXe siècle. Elles ont connu une évolution rapide grâce aux progrès de la science et de la technologie. En 1969, une fusée a permis d'envoyer les astronautes de la mission Apollo 11 sur la Lune, marquant ainsi une étape importante dans l'histoire de l'exploration spatiale.",
+   "Aujourd'hui, les fusées jouent un rôle essentiel dans le développement des activités spatiales. Elles servent à mettre en orbite des satellites de communication, de navigation et d'observation de la Terre. Elles permettent également l'exploration de l'espace et l'étude des planètes, des étoiles et d'autres corps célestes.",
+   "Les missions spatiales réalisées grâce aux fusées contribuent au progrès scientifique et technologique. Les informations recueillies dans l'espace permettent d'améliorer les connaissances sur l'Univers et de développer de nouvelles technologies utiles à la vie quotidienne.",
+   "Grâce aux fusées, l'être humain a pu repousser les limites de l'exploration et réaliser des découvertes importantes. Elles représentent un symbole du génie scientifique et de la capacité de l'homme à innover.",
+   "En conclusion, la fusée constitue une innovation majeure qui a révolutionné l'exploration spatiale et favorisé le développement scientifique et technique du monde moderne."
+  ],
+  vocab:{
+    mots:[
+      {fr:"La fusée",ar:"الصاروخ"},{fr:"Le véhicule spatial",ar:"المركبة الفضائية"},
+      {fr:"Les charges utiles",ar:"الحمولات النافعة"},{fr:"Le satellite",ar:"القمر الصناعي"},
+      {fr:"L'astronaute",ar:"رائد الفضاء"},{fr:"L'espace",ar:"الفضاء"},
+      {fr:"Le moteur",ar:"المحرك"},{fr:"Le siècle (XXe)",ar:"القرن العشرين"},
+      {fr:"L'évolution",ar:"التطور"},{fr:"Le progrès",ar:"التقدم"},
+      {fr:"La science",ar:"العلم"},{fr:"La technologie",ar:"التكنولوجيا"},
+      {fr:"La mission",ar:"المهمة"},{fr:"La Lune",ar:"القمر"},
+      {fr:"L'exploration spatiale",ar:"استكشاف الفضاء"},{fr:"L'orbite",ar:"المدار"},
+      {fr:"La planète",ar:"الكوكب"},{fr:"Les corps célestes",ar:"الأجرام السماوية"},
+      {fr:"L'Univers",ar:"الكون"},{fr:"L'innovation",ar:"الابتكار"}
+    ],
+    verbes:[
+      {fr:"Transporter",ar:"نقل"},{fr:"Concevoir",ar:"صمّم"},
+      {fr:"Développer",ar:"طوّر"},{fr:"Envoyer",ar:"أرسل"},
+      {fr:"Marquer",ar:"ميّز"},{fr:"Jouer (un rôle)",ar:"لعب دورًا"},
+      {fr:"Servir (à)",ar:"استخدم لـ"},{fr:"Mettre en orbite",ar:"وضع في المدار"},
+      {fr:"Permettre",ar:"سمح بـ"},{fr:"Explorer",ar:"استكشف"},
+      {fr:"Étudier",ar:"درس"},{fr:"Contribuer",ar:"ساهم"},
+      {fr:"Réaliser",ar:"حقق"},{fr:"Améliorer",ar:"حسّن"},
+      {fr:"Recueillir",ar:"جمع"},{fr:"Repousser (les limites)",ar:"دفع الحدود"},
+      {fr:"Découvrir",ar:"اكتشف"},{fr:"Représenter",ar:"مثّل"},
+      {fr:"Innover",ar:"ابتكر"},{fr:"Révolutionner",ar:"أحدث ثورة"}
+    ]
+  },
+  comprehension:[
+["Quel est le sujet du texte ?",["La fusée","La voiture","Le train","Le bateau"],0],
+["La fusée est une réalisation ...",["Scientifique et technique","Artistique","Musicale","Sportive"],0],
+["Que transporte une fusée ?",["Charges utiles et astronautes","Animaux seulement","Voitures","Meubles"],0],
+["Quand les premières fusées modernes ont-elles été développées ?",["XXe siècle","XVe siècle","XVIIIe siècle","Moyen Âge"],0],
+["Quelle mission est citée dans le texte ?",["Apollo 11","Apollo 5","Voyager","Sputnik"],0],
+["En quelle année Apollo 11 a-t-elle atteint la Lune ?",["1969","1957","2001","1980"],0],
+["Où les astronautes de la mission ont-ils été envoyés ?",["La Lune","Mars","Vénus","Jupiter"],0],
+["Les fusées jouent un rôle essentiel dans ...",["Les activités spatiales","La pêche","La cuisine","Le théâtre"],0],
+["Les fusées mettent en orbite ...",["Des satellites","Des maisons","Des arbres","Des voitures"],0],
+["Quel type de satellites est cité ?",["Communication","Cuisine","Agriculture","Mode"],0],
+["Les fusées permettent l'exploration de ...",["L'espace","Les océans","Les montagnes","Les villes"],0],
+["Elles aident à étudier ...",["Les planètes","Les routes","Les usines","Les écoles"],0],
+["Elles permettent aussi d'étudier ...",["Les étoiles","Les livres","Les forêts","Les ports"],0],
+["Les missions spatiales contribuent au ...",["Progrès scientifique","Recul scientifique","Sport","Commerce"],0],
+["Les informations recueillies dans l'espace améliorent ...",["Les connaissances de l'Univers","Les jeux","Les films","Les chansons"],0],
+["Grâce aux fusées, l'homme a pu ...",["Repousser les limites","Arrêter la science","Vivre sur le Soleil","Supprimer les satellites"],0],
+["Les fusées représentent un symbole du ...",["Génie scientifique","Hasard","Sport","Tourisme"],0],
+["Elles montrent la capacité de l'homme à ...",["Innover","Dormir","Nager","Dessiner"],0],
+["La fusée a révolutionné ...",["L'exploration spatiale","La cuisine","Le football","La peinture"],0],
+["Le texte est de type ...",["Expositif","Narratif","Poétique","Théâtral"],0]
+  ]
 }
 ];
 
@@ -743,50 +901,6 @@ const MODULES = [
    ÉTAT / NAVIGATION
    ============================================================ */
 let state = { view:'home', moduleId:null, tab:'texte', vocabCat:'mots', quiz:null };
-
-/* ---------- installation PWA (Android : invite native / iOS : instructions) ---------- */
-let deferredInstallPrompt = null;
-const isIOSDevice = /iphone|ipad|ipod/i.test(navigator.userAgent);
-const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-
-window.addEventListener('beforeinstallprompt', (e)=>{
-  e.preventDefault();
-  deferredInstallPrompt = e;
-  if(state.view==='home') render();
-});
-window.addEventListener('appinstalled', ()=>{
-  deferredInstallPrompt = null;
-  if(state.view==='home') render();
-});
-
-function showIOSInstallModal(){
-  const backdrop = document.createElement('div');
-  backdrop.className='install-modal-backdrop';
-  backdrop.innerHTML = `
-    <div class="install-modal">
-      <h3>📲 Installer l'application</h3>
-      <ol>
-        <li>Appuyez sur l'icône de partage <b>📤</b> en bas de Safari</li>
-        <li>Faites défiler et appuyez sur <b>« Sur l'écran d'accueil »</b></li>
-        <li>Appuyez sur <b>« Ajouter »</b> en haut à droite</li>
-      </ol>
-      <button class="close-btn" id="closeInstallModal">Compris</button>
-    </div>`;
-  backdrop.onclick = (e)=>{ if(e.target===backdrop) backdrop.remove(); };
-  document.body.appendChild(backdrop);
-  backdrop.querySelector('#closeInstallModal').onclick = ()=> backdrop.remove();
-}
-
-async function handleInstallClick(){
-  if(deferredInstallPrompt){
-    deferredInstallPrompt.prompt();
-    await deferredInstallPrompt.userChoice;
-    deferredInstallPrompt = null;
-    render();
-  } else if(isIOSDevice){
-    showIOSInstallModal();
-  }
-}
 
 function go(view, extra){ state = Object.assign(state, {view}, extra||{}); render(); }
 function getModule(id){ return MODULES.find(m=>m.id===id); }
@@ -1078,13 +1192,6 @@ function render(){
     const top = document.createElement('div');
     top.className='top';
     top.innerHTML = `<div class="brand"><span class="mark">FR·AR</span><h1>Fiches &amp; Quiz</h1></div>`;
-    if(!isStandalone && (deferredInstallPrompt || isIOSDevice)){
-      const installBtn = document.createElement('button');
-      installBtn.className='install-btn';
-      installBtn.innerHTML = '📲 Installer';
-      installBtn.onclick = handleInstallClick;
-      top.appendChild(installBtn);
-    }
     app.appendChild(top);
 
     const note = document.createElement('p');
