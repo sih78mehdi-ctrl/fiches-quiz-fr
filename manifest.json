@@ -1,6 +1,6 @@
 {
-  "name": "Fiches & Quiz FR-AR",
-  "short_name": "Fiches Quiz",
+  "name": "TEXTES FR 2AS",
+  "short_name": "TEXTES FR 2AS",
   "description": "Textes, vocabulaire et quiz de compréhension bilingues français-arabe",
   "start_url": "./index.html",
   "scope": "./",
