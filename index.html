@@ -1109,6 +1109,193 @@ const MODULES = [
 ];
 
 /* ============================================================
+   COMPRÉHENSION DE L'ÉCRIT — 10 questions ouvertes (sans choix)
+   par texte, pour un examen classique de compréhension écrite.
+   ============================================================ */
+const ECRIT_QUESTIONS = {
+  'ecosysteme':[
+    "Quel est le sujet traité dans ce texte ?",
+    "Que signifie le mot « écosystème » d'après le texte ? Relevez sa définition.",
+    "D'où vient le mot « trophique » et quelle est son origine étymologique ?",
+    "Qu'est-ce qu'une chaîne alimentaire ? Expliquez avec vos propres mots.",
+    "Par quel type d'organisme commence toujours une chaîne alimentaire ? Justifiez par une phrase du texte.",
+    "Pourquoi appelle-t-on les végétaux chlorophylliens des « producteurs » ?",
+    "Que désigne le terme « consommateurs » selon le texte ?",
+    "Quel rôle jouent les décomposeurs dans un écosystème ?",
+    "Expliquez, en une phrase, ce qu'est la « minéralisation » évoquée dans le dernier paragraphe.",
+    "Le texte comporte plusieurs paragraphes : donnez en une phrase l'idée principale de chacun."
+  ],
+  'tabagisme':[
+    "Quel problème de société ce texte présente-t-il ?",
+    "Donnez la définition du tabagisme telle qu'elle apparaît dans le premier paragraphe.",
+    "Quelles sont les trois catégories de maladies citées comme causées par le tabagisme ?",
+    "Que signifie l'expression « fumeur passif » ? Expliquez avec vos propres mots.",
+    "Pourquoi de nombreux pays ont-ils adopté des lois limitant la consommation du tabac dans les lieux publics ? Relevez la cause dans le texte.",
+    "Quelles actions les autorités sanitaires mettent-elles en place pour lutter contre le tabagisme ?",
+    "À qui, selon vous, le texte s'adresse-t-il en priorité ? Justifiez à partir d'un indice du texte.",
+    "Relevez la phrase qui donne la conclusion du texte.",
+    "L'auteur exprime-t-il une opinion personnelle ou présente-t-il des faits de manière objective ? Justifiez.",
+    "Proposez un titre différent qui reflète l'idée principale du texte."
+  ],
+  'portable':[
+    "Quel est le type de ce texte, d'après la fiche signalétique ?",
+    "À quoi sert un téléphone portable, selon la définition donnée dans le premier paragraphe ?",
+    "En quelle décennie sont apparus les premiers téléphones portables ?",
+    "Relevez deux exemples d'utilisations actuelles du portable citées dans le troisième paragraphe.",
+    "Dans quels domaines le portable joue-t-il un rôle important, d'après le texte ?",
+    "Quels sont les dangers d'une utilisation excessive du téléphone portable mentionnés dans le texte ?",
+    "Quel mot introduit la restriction/le danger dans l'avant-dernier paragraphe ? Que marque-t-il ?",
+    "Que signifie l'expression « usage responsable » dans le contexte du texte ?",
+    "Relevez la phrase de conclusion et expliquez son idée avec vos propres mots.",
+    "Pourquoi peut-on dire que ce texte est un texte objectif (expositif) et non argumentatif ?"
+  ],
+  'internet':[
+    "Comment le texte définit-il Internet dans le premier paragraphe ?",
+    "À quelle décennie remontent les origines d'Internet ?",
+    "Citez trois activités rendues possibles par Internet selon le troisième paragraphe.",
+    "Dans quels domaines Internet joue-t-il un rôle important d'après le texte ?",
+    "Quelles précautions le texte recommande-t-il de prendre en utilisant Internet ?",
+    "Que signifie le mot « désinformation » évoqué dans le texte ? Expliquez avec vos propres mots.",
+    "Relevez un mot du texte appartenant au champ lexical de la sécurité informatique.",
+    "Quel est l'objet d'étude indiqué dans la fiche signalétique de ce texte ?",
+    "Résumez en une phrase l'idée principale du texte.",
+    "Comparez ce texte à celui sur « le portable » : quel point commun retrouvez-vous dans leur structure ?"
+  ],
+  'fusee':[
+    "Comment le texte définit-il une fusée ?",
+    "À quoi sert une fusée, selon le premier paragraphe ?",
+    "Quel événement historique est cité en 1969 ? Quelle est son importance ?",
+    "Citez trois missions actuelles des fusées mentionnées dans le texte.",
+    "Quels bénéfices les missions spatiales apportent-elles à la science, selon le texte ?",
+    "Relevez une expression qui montre l'admiration de l'auteur pour les progrès permis par les fusées.",
+    "Que signifie l'expression « repousser les limites de l'exploration » ?",
+    "Quel est le siècle où les premières fusées modernes ont été développées ?",
+    "Quelle est la conclusion du texte concernant l'importance de la fusée ?",
+    "Ce texte suit-il le même schéma que les textes sur Internet et le portable ? Justifiez."
+  ],
+  'science':[
+    "Quelle est l'obsession fondamentale des humains, selon l'auteur ?",
+    "Pourquoi les hommes cherchent-ils à comprendre les phénomènes qui les entourent ?",
+    "Quelle peur commune aux animaux et aux humains est évoquée au début du texte ?",
+    "Qu'est-ce qui a remplacé « l'étonnement et la terreur » face au feu ?",
+    "Sur quoi étaient fondées les premières réponses de l'homme aux phénomènes naturels ?",
+    "Que signifie l'expression « éliminant le mystère au profit de l'explication » ?",
+    "Pourquoi les flammes restent-elles fascinantes même quand on connaît leur explication scientifique ?",
+    "Qui décrit « le jeu des interactions entre molécules », d'après le texte ?",
+    "Expliquez avec vos propres mots la phrase finale : « C'est cela la science : un effort jamais achevé... »",
+    "Qui est l'auteur de ce texte, et de quelle œuvre est-il extrait ?"
+  ],
+  'satellites':[
+    "Qu'est-ce qu'un satellite artificiel, selon la définition donnée dans le texte ?",
+    "Quel est le nom du premier satellite artificiel, et en quelle année a-t-il été lancé ?",
+    "Quel pays a lancé ce premier satellite ?",
+    "Quels sont les différents types de satellites cités dans le texte et à quoi servent-ils ?",
+    "En quoi les satellites météorologiques sont-ils utiles ?",
+    "Comment les satellites contribuent-ils à la prévention des catastrophes naturelles ?",
+    "Relevez une phrase qui montre l'importance des satellites dans la vie quotidienne.",
+    "Que signifie l'expression « mettre en orbite » ?",
+    "Quelle est l'idée développée dans la conclusion du texte ?",
+    "Quel est le type de texte indiqué dans la fiche signalétique ?"
+  ],
+  'vaccination':[
+    "Pourquoi est-il nécessaire d'être vacciné, selon l'introduction du texte ?",
+    "En quoi consiste l'action de « vacciner » quelqu'un ?",
+    "Comment le vaccin agit-il pour protéger l'organisme ? Expliquez le mécanisme avec vos propres mots.",
+    "Pourquoi un patient vacciné peut-il parfois avoir de la fièvre ?",
+    "Le vaccin déclenche-t-il la maladie qu'il est censé prévenir ? Justifiez votre réponse à partir du texte.",
+    "Citez deux maladies dues à des virus contre lesquelles on peut être vacciné.",
+    "Citez deux maladies dues à des bactéries contre lesquelles on peut être vacciné.",
+    "Quelle est la différence entre une maladie due à un virus et une maladie due à une bactérie, d'après le texte ?",
+    "Qui est l'auteur (ou la source) de ce texte ?",
+    "Expliquez avec vos propres mots pourquoi la vaccination peut être vue comme une « ruse » pour le système immunitaire."
+  ],
+  'cycle-eau':[
+    "Pourquoi dit-on que l'eau est une ressource indispensable à la vie sur Terre ?",
+    "Comment s'appelle le phénomène qui permet à l'eau de circuler en permanence dans la nature ?",
+    "Que se passe-t-il avec l'eau des océans sous l'effet de la chaleur du soleil ?",
+    "Qu'est-ce que la « transpiration » chez les plantes, selon le texte ?",
+    "Comment se forment les nuages, d'après le texte ?",
+    "Citez les trois formes de précipitations mentionnées dans le texte.",
+    "Que devient l'eau qui s'infiltre dans le sol ?",
+    "Nommez, dans l'ordre, les quatre étapes du cycle de l'eau citées dans le texte.",
+    "Quel rôle joue le cycle de l'eau dans l'équilibre des écosystèmes, selon la conclusion ?",
+    "Résumez en 3 à 4 phrases l'ensemble du cycle de l'eau, du début à la fin."
+  ],
+  'abeilles':[
+    "Que signifie la phrase « l'individu est peu de chose, la famille n'existe pas, la société est tout » chez les abeilles ?",
+    "Combien d'individus compte environ une communauté d'abeilles ?",
+    "Quelles sont les trois catégories d'abeilles qui composent une colonie ?",
+    "Quelle est la durée de vie de la reine ? Et celle des ouvrières ?",
+    "Que devient le sort des mâles (faux bourdons) en automne ?",
+    "Qu'est-ce que le « vol nuptial » évoqué dans le texte ?",
+    "Combien d'œufs la reine peut-elle pondre par jour ?",
+    "Décrivez, avec vos propres mots, les étapes de la métamorphose de l'abeille, de l'œuf à l'insecte adulte.",
+    "Que fait l'insecte une fois sa métamorphose terminée, selon la dernière phrase du texte ?",
+    "Quelle est la source de ce texte ?"
+  ],
+  'microscope':[
+    "À quoi sert un microscope, selon la définition donnée au début du texte ?",
+    "Dans quels domaines scientifiques le microscope est-il utilisé, selon le texte ?",
+    "Qui aurait fabriqué le premier microscope, et en quelle année ?",
+    "Quel est le rôle du miroir dans un microscope optique ?",
+    "À quoi sert le diaphragme ?",
+    "Que pose-t-on sur la platine porte-échantillon ?",
+    "Quelle est la différence entre l'objectif et l'oculaire, d'après le texte ?",
+    "Par quel appareil peut-on remplacer l'oculaire, selon le texte ?",
+    "Sur quel principe optique se base le microscope pour obtenir une image agrandie ?",
+    "Quelle est la source citée à la fin du texte ?"
+  ],
+  'scanner':[
+    "Qu'est-ce qu'un scanner, selon la définition donnée dans le texte ?",
+    "Quelles technologies le scanner utilise-t-il pour produire des images ?",
+    "Décrivez, avec vos propres mots, le déroulement d'un examen au scanner.",
+    "Quel rôle joue l'ordinateur dans le fonctionnement du scanner ?",
+    "Citez trois types de problèmes de santé que le scanner permet de détecter.",
+    "Pourquoi le scanner est-il considéré comme un outil indispensable dans les hôpitaux ?",
+    "Pourquoi son emploi doit-il rester limité à certaines situations, selon la dernière partie du texte ?",
+    "Que signifie l'expression « bénéfices supérieurs aux risques » dans le contexte du texte ?",
+    "Le texte est organisé en quatre parties : donnez le titre de chacune.",
+    "D'où provient ce texte, selon l'indication donnée à la fin ?"
+  ],
+  'cellule':[
+    "Quelles propriétés caractérisent la vie chez l'homme, selon le premier paragraphe ?",
+    "Pourquoi peut-on dire que « la cellule possède toutes les propriétés de l'homme » ?",
+    "Qu'est-ce que la cellule, selon la définition donnée dans le texte ?",
+    "Énoncez les deux points de la théorie cellulaire formulée au XIXe siècle.",
+    "Quel nom donne-t-on à la science qui étudie la cellule ?",
+    "Qui a fait naître la cytologie, et à quel siècle ?",
+    "Grâce à quel instrument la cytologie a-t-elle progressé, selon le texte ?",
+    "Que permet d'étudier le microscope électronique, d'après le texte ?",
+    "Que signifie le mot « ultrastructure » dans le contexte du texte ?",
+    "Quelle est la source (auteurs, lieu, année) de ce texte ?"
+  ],
+  'insuline':[
+    "Qu'est-ce que l'insuline, et par quel organe est-elle produite ?",
+    "Quel est le rôle de l'insuline dans l'organisme ?",
+    "Que se passe-t-il dans le sang après chaque repas ?",
+    "Comment le pancréas réagit-il à l'augmentation du taux de sucre dans le sang ?",
+    "Que peut-il arriver si le corps ne produit pas suffisamment d'insuline ?",
+    "Comment s'appelle la maladie provoquée par un manque d'insuline ou une mauvaise utilisation de celle-ci ?",
+    "Sous quelles formes l'insuline peut-elle être administrée à un patient diabétique ?",
+    "Décrivez, avec vos propres mots, les étapes du mécanisme d'action de l'insuline après un repas.",
+    "Que faut-il retenir à propos du rôle de l'insuline, d'après le dernier paragraphe du texte ?",
+    "D'où provient ce texte, selon l'indication donnée à la fin ?"
+  ],
+  'graisses':[
+    "Quel est le sujet principal traité dans ce texte ?",
+    "Quelles sont les deux questions que se pose l'auteur au début du texte ?",
+    "Quel type de graisse est présenté comme « mauvais » pour la santé ? Lequel est présenté comme « bon » ?",
+    "Selon le tableau, quel type de graisse a le pourcentage le plus élevé d'« augmentation du risque » ?",
+    "Quel type de graisse a le pourcentage le plus élevé d'« influence protectrice » ?",
+    "Comparez le beurre et l'huile d'olive selon les données du tableau.",
+    "Pourquoi peut-on dire que le lien entre certaines graisses et le cancer reste « obscur » ?",
+    "Que signifie l'expression « au banc des accusés » utilisée dans le titre ? À quoi fait-elle référence ?",
+    "Résumez en une phrase l'idée principale du texte, telle qu'elle est donnée dans l'encadré final.",
+    "D'après ce texte, quel conseil alimentaire peut-on donner en matière de consommation de graisses ?"
+  ]
+};
+
+/* ============================================================
    ÉTAT / NAVIGATION
    ============================================================ */
 let state = { view:'home', moduleId:null, tab:'texte', vocabCat:'mots', quiz:null };
@@ -1422,7 +1609,7 @@ function render(){
             <div class="emoji">${mod.icon}</div>
             <div class="tag" style="color:${mod.color}">${mod.source}</div>
             <h2>${mod.title}</h2>
-            <p>Texte · vocabulaire · compréhension</p>
+            <p>Texte · vocabulaire · compréhension · compréhension de l'écrit</p>
           </div>
           <div class="chevron">›</div>
         </div>`;
@@ -1451,7 +1638,7 @@ function render(){
 
     const tabs = document.createElement('div');
     tabs.className='tabs';
-    const tabDefs = [['texte','📖 Texte'],['vocabulaire','📝 Vocabulaire'],['comprehension','🧠 Compréhension']];
+    const tabDefs = [['texte','📖 Texte'],['vocabulaire','📝 Vocabulaire'],['comprehension','🧠 Compréhension'],['ecrit',"✍️ Compréhension de l'écrit"]];
     tabDefs.forEach(([key,label])=>{
       const b = document.createElement('button');
       b.className='tab'+(state.tab===key?' active':'');
@@ -1550,6 +1737,42 @@ function render(){
       app.appendChild(panel);
       return;
     }
+
+    if(state.tab==='ecrit'){
+      const questions = ECRIT_QUESTIONS[mod.id] || [];
+
+      const qPanel = document.createElement('div');
+      qPanel.className='panel';
+      qPanel.style.setProperty('--accent', mod.color);
+
+      const prog = document.createElement('div');
+      prog.className='progress';
+      prog.textContent = "Compréhension de l'écrit · "+questions.length+' questions · sans choix de réponses';
+      qPanel.appendChild(prog);
+
+      questions.forEach((q,i)=>{
+        const box = document.createElement('div');
+        box.className='question';
+        box.style.borderLeft = '4px solid '+mod.color;
+        box.innerHTML = `<b>${i+1}. ${q}</b>
+          <textarea placeholder="Écrivez votre réponse ici..." style="width:100%;border-radius:7px;border:1px solid var(--line);padding:10px 12px;font-family:inherit;font-size:14px;resize:vertical;min-height:60px;box-sizing:border-box"></textarea>`;
+        qPanel.appendChild(box);
+      });
+
+      const actions = document.createElement('div');
+      actions.className='actions';
+      const clearBtn = document.createElement('button');
+      clearBtn.className='btn ghost'; clearBtn.textContent='Effacer mes réponses';
+      const printBtn = document.createElement('button');
+      printBtn.className='btn'; printBtn.style.background=mod.color; printBtn.textContent='Imprimer';
+      actions.appendChild(clearBtn); actions.appendChild(printBtn);
+      qPanel.appendChild(actions);
+
+      app.appendChild(qPanel);
+      clearBtn.onclick = ()=> qPanel.querySelectorAll('textarea').forEach(t=> t.value='');
+      printBtn.onclick = ()=> window.print();
+      return;
+    }
   }
 
   if(state.view==='vocabQuiz'){
@@ -1560,6 +1783,7 @@ function render(){
     initCosmicQuiz(mod, state.vocabQuizCat||'mots', root, ()=> go('module',{tab:'vocabulaire'}));
     return;
   }
+
 }
 
 render();
