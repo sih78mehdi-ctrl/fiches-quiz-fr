@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📖 Compréhension de l'écrit - 2AS</title>
+<style>
+  :root{
+    --bg:#eef4fb;
+    --ink:#1c2b3a;
+    --card:#ffffff;
+    --accent1:#2e86de; /* bleu */
+    --accent2:#27ae60; /* vert */
+    --accent3:#f39c12; /* orange */
+    --accent4:#e84393; /* rose */
+    --accent5:#9b59b6; /* violet */
+    --accent6:#16a596; /* teal */
+    --radius:18px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family: 'Segoe UI', Verdana, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding-bottom: 60px;
+  }
+  header{
+    background: linear-gradient(120deg,#2e86de,#16a596);
+    color:white;
+    padding: 34px 20px 46px;
+    text-align:center;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  }
+  header h1{
+    margin:0;
+    font-size: 2rem;
+    letter-spacing: .5px;
+  }
+  header p{
+    margin: 10px auto 0;
+    max-width: 640px;
+    font-size: .98rem;
+    opacity: .95;
+    line-height:1.5;
+  }
+  .wrap{
+    max-width: 1100px;
+    margin: -26px auto 0;
+    padding: 0 18px;
+  }
+  #gridView .grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+    gap: 18px;
+    margin-top: 30px;
+  }
+  .fiche-card{
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    text-align:center;
+    cursor:pointer;
+    box-shadow: 0 4px 14px rgba(20,40,80,0.10);
+    border: 3px solid transparent;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .fiche-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba(20,40,80,0.18);
+  }
+  .fiche-card .icon{
+    font-size: 2.4rem;
+    display:block;
+    margin-bottom: 10px;
+  }
+  .fiche-card h3{
+    margin: 0 0 6px;
+    font-size: 1.02rem;
+    line-height:1.3;
+  }
+  .fiche-card .tag{
+    display:inline-block;
+    font-size: .72rem;
+    font-weight:600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    color:white;
+  }
+  .section-label{
+    text-align:center;
+    font-size: .95rem;
+    color:#4a5568;
+    margin-top: 8px;
+  }
+
+  /* Reading view */
+  #readerView{ display:none; }
+  .back-btn{
+    background:white;
+    border: 2px solid #2e86de;
+    color:#2e86de;
+    font-weight:700;
+    padding: 8px 18px;
+    border-radius: 30px;
+    cursor:pointer;
+    margin: 22px 0 10px;
+    font-size:.9rem;
+  }
+  .back-btn:hover{ background:#2e86de; color:white; }
+
+  .text-card{
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px 26px;
+    box-shadow: 0 4px 14px rgba(20,40,80,0.10);
+    margin-bottom: 22px;
+  }
+  .text-card h2{
+    margin-top:0;
+    font-size: 1.4rem;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .meta-row{
+    font-size:.8rem;
+    color:#5a6b7d;
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+  .text-card p{
+    line-height: 1.7;
+    font-size: 1rem;
+    margin: 0 0 14px;
+    text-align: justify;
+  }
+  .source-line{
+    text-align:right;
+    font-size:.82rem;
+    color:#7a8a99;
+    font-style:italic;
+    margin-top: 6px;
+  }
+
+  .quiz-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .quiz-header h3{
+    margin:0;
+    font-size: 1.15rem;
+  }
+  .quiz-actions button{
+    background: var(--accent1);
+    color:white;
+    border:none;
+    padding: 8px 16px;
+    border-radius: 24px;
+    font-size:.82rem;
+    font-weight:600;
+    cursor:pointer;
+    margin-left: 8px;
+  }
+  .quiz-actions button.secondary{
+    background:white;
+    color: var(--accent1);
+    border: 2px solid var(--accent1);
+  }
+
+  .question-block{
+    background: #fbfdff;
+    border-left: 5px solid var(--accent1);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+  .question-block .qnum{
+    font-weight: 800;
+    color: var(--accent1);
+    margin-right: 6px;
+  }
+  .question-block textarea{
+    width:100%;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1.5px solid #d7e2ee;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: .95rem;
+    resize: vertical;
+    min-height: 54px;
+  }
+  .question-block textarea:focus{
+    outline: none;
+    border-color: var(--accent1);
+  }
+
+  @media print{
+    header, .back-btn, .quiz-actions, #gridView{ display:none !important; }
+    body{ background:white; }
+    .text-card, .question-block{ box-shadow:none; border:1px solid #ccc; }
+  }
+
+  footer{
+    text-align:center;
+    color:#7a8a99;
+    font-size:.8rem;
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📖 Compréhension de l'écrit</h1>
+  <p>15 textes, 10 questions par texte. Lisez attentivement chaque texte puis répondez avec vos propres mots, comme dans un examen de français — sans choix de réponses.</p>
+</header>
+
+<div class="wrap">
+
+  <div id="gridView">
+    <p class="section-label">Choisissez un texte pour commencer 👇</p>
+    <div class="grid" id="cardsGrid"></div>
+  </div>
+
+  <div id="readerView">
+    <button class="back-btn" onclick="showGrid()">← Retour à la liste des textes</button>
+    <div id="readerContent"></div>
+  </div>
+
+</div>
+
+<footer>TEXTES FR 2AS — Rubrique Compréhension de l'écrit</footer>
+
+<script>
+const colors = ['#2e86de','#27ae60','#f39c12','#e84393','#9b59b6','#16a596'];
+
+const data = [
+{
+  icon:"🌿",
+  title:"Les relations dans un écosystème",
+  source:"",
+  text:[
+   "Lorsque les biologistes étudient un milieu, ils utilisent le terme d'écosystème qui désigne d'une part toutes les espèces animales et végétales qui habitent un même lieu, d'autre part les relations qu'elles établissent entre elles et avec le milieu.",
+   "Dans un milieu donné, il s'établit un véritable réseau de relations alimentaires, appelé réseau trophique (du grec « trophos » qui signifie nourriture). Dans un réseau, tous les animaux se nourrissent d'autres animaux ou de plantes. Un réseau est constitué de plusieurs chaînes alimentaires ; une chaîne alimentaire est une relation simple entre des êtres vivants dans laquelle chaque individu mange celui qui le précède et sert de nourriture à celui qui le suit ; cette organisation permet un transfert de matière et d'énergie d'un être à un autre. Le nombre de maillons peut varier d'une chaîne alimentaire à une autre, mais chaque chaîne débute toujours par un végétal chlorophyllien. Ces végétaux sont appelés producteurs parce qu'ils produisent de la matière organique à partir d'éléments inorganiques. Cette matière est consommée par les autres êtres vivants appelés pour cette raison des consommateurs.",
+   "Dans tous les milieux, toute une faune d'animaux de petite taille et une flore de bactéries et de champignons se nourrissent de matière organique morte (cadavres d'animaux, restes de végétaux) dont ils provoquent la décomposition. Ces décomposeurs procèdent à la minéralisation de cette matière organique, assurant ainsi son recyclage en sels minéraux qui servent de nourriture aux plantes chlorophylliennes."
+  ],
+  questions:[
+   "Quel est le sujet traité dans ce texte ?",
+   "Que signifie le mot « écosystème » d'après le texte ? Relevez sa définition.",
+   "D'où vient le mot « trophique » et quelle est son origine étymologique ?",
+   "Qu'est-ce qu'une chaîne alimentaire ? Expliquez avec vos propres mots.",
+   "Par quel type d'organisme commence toujours une chaîne alimentaire ? Justifiez par une phrase du texte.",
+   "Pourquoi appelle-t-on les végétaux chlorophylliens des « producteurs » ?",
+   "Que désigne le terme « consommateurs » selon le texte ?",
+   "Quel rôle jouent les décomposeurs dans un écosystème ?",
+   "Expliquez, en une phrase, ce qu'est la « minéralisation » évoquée dans le dernier paragraphe.",
+   "Le texte comporte trois paragraphes : donnez en une phrase l'idée principale de chacun."
+  ]
+},
+{
+  icon:"🚭",
+  title:"Le tabagisme",
+  source:"",
+  text:[
+   "Le tabagisme est l'habitude de consommer du tabac, principalement sous forme de cigarettes. Cette pratique est répandue dans de nombreux pays et touche des millions de personnes. Malgré les campagnes de sensibilisation, le nombre de fumeurs reste important, notamment chez les jeunes.",
+   "La fumée de cigarette contient plusieurs milliers de substances chimiques. Parmi elles, certaines sont toxiques et peuvent provoquer de graves maladies. Le tabagisme est reconnu comme l'une des principales causes de cancers, de maladies cardiovasculaires et de maladies respiratoires.",
+   "Les effets du tabac ne concernent pas uniquement les fumeurs. Les personnes qui inhalent involontairement la fumée des autres, appelées fumeurs passifs, peuvent également souffrir de problèmes de santé. C'est pourquoi de nombreux pays ont adopté des lois limitant la consommation du tabac dans les lieux publics.",
+   "Pour lutter contre ce phénomène, les autorités sanitaires organisent régulièrement des campagnes d'information afin de sensibiliser la population aux dangers du tabac. De plus, plusieurs méthodes permettent aux fumeurs d'arrêter de fumer et d'améliorer ainsi leur qualité de vie.",
+   "Le tabagisme demeure donc un problème de santé publique qui nécessite la participation de tous pour protéger la santé individuelle et collective."
+  ],
+  questions:[
+   "Quel problème de société ce texte présente-t-il ?",
+   "Donnez la définition du tabagisme telle qu'elle apparaît dans le premier paragraphe.",
+   "Quelles sont les trois catégories de maladies citées comme causées par le tabagisme ?",
+   "Que signifie l'expression « fumeur passif » ? Expliquez avec vos propres mots.",
+   "Pourquoi de nombreux pays ont-ils adopté des lois limitant la consommation du tabac dans les lieux publics ? Relevez la cause dans le texte.",
+   "Quelles actions les autorités sanitaires mettent-elles en place pour lutter contre le tabagisme ?",
+   "À qui, selon vous, le texte s'adresse-t-il en priorité ? Justifiez à partir d'un indice du texte.",
+   "Relevez la phrase qui donne la conclusion du texte.",
+   "L'auteur exprime-t-il une opinion personnelle ou présente-t-il des faits de manière objective ? Justifiez.",
+   "Proposez un titre différent qui reflète l'idée principale du texte."
+  ]
+},
+{
+  icon:"📱",
+  title:"Le portable : une innovation technologique indispensable",
+  source:"Type de texte : Expositif — Objet d'étude : Le discours objectivé — Environ 200 mots.",
+  text:[
+   "Le téléphone portable est l'une des inventions technologiques les plus importantes de notre époque. Il s'agit d'un appareil électronique qui permet de communiquer à distance grâce aux réseaux de télécommunication.",
+   "Les premiers téléphones portables sont apparus dans les années 1970. Depuis leur création, ils ont connu une évolution remarquable. De simples appareils destinés aux appels téléphoniques, ils sont devenus de véritables outils multifonctionnels capables d'exécuter de nombreuses tâches.",
+   "Aujourd'hui, le téléphone portable occupe une place essentielle dans la vie quotidienne. Il permet non seulement de passer des appels et d'envoyer des messages, mais aussi d'accéder à Internet, de prendre des photographies, de regarder des vidéos et d'utiliser diverses applications.",
+   "Le portable joue également un rôle important dans les domaines de l'éducation, du commerce, de la santé et de la recherche scientifique. Grâce à cet outil, les échanges d'informations sont devenus plus rapides et plus efficaces. Il facilite également l'accès aux connaissances et aux services numériques.",
+   "Cependant, l'utilisation du téléphone portable doit être raisonnable. Une utilisation excessive peut entraîner une dépendance, réduire la concentration et avoir des effets négatifs sur la santé. Il est donc nécessaire d'en faire un usage responsable.",
+   "En conclusion, le téléphone portable représente une réalisation technologique majeure qui a profondément transformé les modes de communication et d'accès à l'information. Il constitue aujourd'hui un outil indispensable dans la société moderne."
+  ],
+  questions:[
+   "Quel est le type de ce texte, d'après la fiche signalétique ?",
+   "À quoi sert un téléphone portable, selon la définition donnée dans le premier paragraphe ?",
+   "En quelle décennie sont apparus les premiers téléphones portables ?",
+   "Relevez deux exemples d'utilisations actuelles du portable citées dans le troisième paragraphe.",
+   "Dans quels domaines le portable joue-t-il un rôle important, d'après le texte ?",
+   "Quels sont les dangers d'une utilisation excessive du téléphone portable mentionnés dans le texte ?",
+   "Quel mot introduit la restriction/le danger dans l'avant-dernier paragraphe ? Que marque-t-il ?",
+   "Que signifie l'expression « usage responsable » dans le contexte du texte ?",
+   "Relevez la phrase de conclusion et expliquez son idée avec vos propres mots.",
+   "Pourquoi peut-on dire que ce texte est un texte objectif (expositif) et non argumentatif ?"
+  ]
+},
+{
+  icon:"🌐",
+  title:"Internet : une réalisation technologique révolutionnaire",
+  source:"Type de texte : Expositif — Objet d'étude : Le discours objectivé — Environ 210 mots.",
+  text:[
+   "Internet est l'une des plus grandes réalisations scientifiques et techniques de notre époque. Il s'agit d'un réseau mondial qui relie des millions d'ordinateurs et de dispositifs à travers le monde afin de permettre l'échange rapide d'informations.",
+   "Les origines d'Internet remontent aux années 1960, lorsque des chercheurs ont développé les premiers réseaux de communication entre ordinateurs. Au fil des années, cette technologie a connu un développement considérable et s'est progressivement étendue à l'échelle mondiale.",
+   "Aujourd'hui, Internet occupe une place essentielle dans la vie quotidienne. Il permet d'accéder à une immense quantité d'informations, de communiquer instantanément grâce au courrier électronique et aux réseaux sociaux, de suivre des formations à distance et d'effectuer diverses activités administratives et commerciales.",
+   "Internet joue également un rôle important dans les domaines de l'éducation, de la recherche scientifique, de la médecine et de l'économie. Les échanges de données sont devenus plus rapides, ce qui favorise la diffusion des connaissances et le développement de nouvelles technologies.",
+   "Cependant, l'utilisation d'Internet exige certaines précautions. Il est nécessaire de protéger ses informations personnelles et de vérifier la fiabilité des sources consultées afin d'éviter la désinformation et les risques liés à la cybersécurité.",
+   "En conclusion, Internet constitue une innovation majeure qui a profondément transformé les modes de communication, d'apprentissage et de travail. Il représente aujourd'hui un outil indispensable au développement scientifique, technique et économique du monde moderne."
+  ],
+  questions:[
+   "Comment le texte définit-il Internet dans le premier paragraphe ?",
+   "À quelle décennie remontent les origines d'Internet ?",
+   "Citez trois activités rendues possibles par Internet selon le troisième paragraphe.",
+   "Dans quels domaines Internet joue-t-il un rôle important d'après le texte ?",
+   "Quelles précautions le texte recommande-t-il de prendre en utilisant Internet ?",
+   "Que signifie le mot « désinformation » évoqué dans le texte ? Expliquez avec vos propres mots.",
+   "Relevez un mot du texte appartenant au champ lexical de la sécurité informatique.",
+   "Quel est l'objet d'étude indiqué dans la fiche signalétique de ce texte ?",
+   "Résumez en une phrase l'idée principale du texte.",
+   "Comparez ce texte à celui sur « le portable » : quel point commun retrouvez-vous dans leur structure ?"
+  ]
+},
+{
+  icon:"🚀",
+  title:"La fusée : une réalisation scientifique exceptionnelle",
+  source:"Type de texte : Expositif — Objet d'étude : Le discours objectivé — Environ 210 mots.",
+  text:[
+   "La fusée est l'une des plus grandes réalisations scientifiques et techniques de notre époque. Il s'agit d'un véhicule spatial conçu pour transporter des charges utiles, des satellites ou des astronautes dans l'espace grâce à la force produite par ses moteurs.",
+   "Les premières fusées modernes ont été développées au cours du XXe siècle. Elles ont connu une évolution rapide grâce aux progrès de la science et de la technologie. En 1969, une fusée a permis d'envoyer les astronautes de la mission Apollo 11 sur la Lune, marquant ainsi une étape importante dans l'histoire de l'exploration spatiale.",
+   "Aujourd'hui, les fusées jouent un rôle essentiel dans le développement des activités spatiales. Elles servent à mettre en orbite des satellites de communication, de navigation et d'observation de la Terre. Elles permettent également l'exploration de l'espace et l'étude des planètes, des étoiles et d'autres corps célestes.",
+   "Les missions spatiales réalisées grâce aux fusées contribuent au progrès scientifique et technologique. Les informations recueillies dans l'espace permettent d'améliorer les connaissances sur l'Univers et de développer de nouvelles technologies utiles à la vie quotidienne.",
+   "Grâce aux fusées, l'être humain a pu repousser les limites de l'exploration et réaliser des découvertes importantes. Elles représentent un symbole du génie scientifique et de la capacité de l'homme à innover.",
+   "En conclusion, la fusée constitue une innovation majeure qui a révolutionné l'exploration spatiale et favorisé le développement scientifique et technique du monde moderne."
+  ],
+  questions:[
+   "Comment le texte définit-il une fusée ?",
+   "À quoi sert une fusée, selon le premier paragraphe ?",
+   "Quel événement historique est cité en 1969 ? Quelle est son importance ?",
+   "Citez trois missions actuelles des fusées mentionnées dans le texte.",
+   "Quels bénéfices les missions spatiales apportent-elles à la science, selon le texte ?",
+   "Relevez une expression qui montre l'admiration de l'auteur pour les progrès permis par les fusées.",
+   "Que signifie l'expression « repousser les limites de l'exploration » ?",
+   "Quel est le siècle où les premières fusées modernes ont été développées ?",
+   "Quelle est la conclusion du texte concernant l'importance de la fusée ?",
+   "Ce texte suit-il le même schéma que les textes sur Internet et le portable ? Justifiez."
+  ]
+},
+{
+  icon:"🔬",
+  title:"La science",
+  source:"Albert Jacquard, « À toi qui n'est pas encore né(e) » — Séquence 1",
+  text:[
+   "Depuis que les humains ont pris conscience de leur propre existence, leur obsession fondamentale a été de chercher les causes derrière les phénomènes, de comprendre car la compréhension fait reculer l'angoisse. Ils ont eu, comme tous les animaux, peur du feu, peur de cette puissance peut-être maléfique qui se manifestait par les flammes ; puis, ils ont remplacé l'étonnement et la terreur par le questionnement : pourquoi cette lumière ? Pourquoi cette chaleur ? Les premières réponses étaient plus inspirées par les croyances que par la raison mais elles se sont peu à peu rapprochées de la réalité, éliminant le mystère au profit de l'explication. L'émerveillement n'en est pas moins profond, au contraire. Les flammes restent toujours aussi fascinantes lorsqu'on connaît les mécanismes naturels qui les rendent chaudes et brillantes. À cette fascination s'ajoute l'admiration pour le jeu décrit par les chimistes des interactions entre molécules capables de produire la danse de la lumière.",
+   "C'est cela la science : un effort jamais achevé pour naître au monde en faisant naître en notre esprit un modèle du monde."
+  ],
+  questions:[
+   "Quelle est l'obsession fondamentale des humains, selon l'auteur ?",
+   "Pourquoi les hommes cherchent-ils à comprendre les phénomènes qui les entourent ?",
+   "Quelle peur commune aux animaux et aux humains est évoquée au début du texte ?",
+   "Qu'est-ce qui a remplacé « l'étonnement et la terreur » face au feu ?",
+   "Sur quoi étaient fondées les premières réponses de l'homme aux phénomènes naturels ?",
+   "Que signifie l'expression « éliminant le mystère au profit de l'explication » ?",
+   "Pourquoi les flammes restent-elles fascinantes même quand on connaît leur explication scientifique ?",
+   "Qui décrit « le jeu des interactions entre molécules », d'après le texte ?",
+   "Expliquez avec vos propres mots la phrase finale : « C'est cela la science : un effort jamais achevé... »",
+   "Qui est l'auteur de ce texte, et de quelle œuvre est-il extrait ?"
+  ]
+},
+{
+  icon:"🛰️",
+  title:"Les satellites : une réalisation scientifique majeure",
+  source:"Type de texte : Expositif — Environ 200 mots.",
+  text:[
+   "Les satellites artificiels constituent l'une des plus grandes réalisations scientifiques et techniques de notre époque. Ce sont des objets fabriqués par l'homme et placés en orbite autour de la Terre ou d'autres corps célestes afin d'accomplir différentes missions.",
+   "Le premier satellite artificiel, appelé Spoutnik 1, a été lancé par l'Union soviétique en 1957. Cet événement a marqué le début de l'ère spatiale et a ouvert la voie à de nombreuses avancées technologiques.",
+   "Aujourd'hui, les satellites jouent un rôle essentiel dans la vie quotidienne. Les satellites de télécommunication permettent la transmission des appels téléphoniques, des émissions de télévision et des données Internet à travers le monde. Les satellites météorologiques observent l'atmosphère et aident à prévoir le temps. D'autres satellites sont utilisés pour la navigation, la recherche scientifique, l'observation de la Terre et la surveillance de l'environnement.",
+   "Les informations recueillies par les satellites contribuent à la prévention des catastrophes naturelles, à l'étude du climat et à l'amélioration des systèmes de transport. Grâce à ces technologies, les échanges d'informations sont devenus plus rapides et plus efficaces.",
+   "En conclusion, les satellites représentent une innovation majeure qui a profondément transformé les communications, la recherche scientifique et la connaissance de notre planète. Ils constituent un outil indispensable au développement scientifique et technique du monde moderne."
+  ],
+  questions:[
+   "Qu'est-ce qu'un satellite artificiel, selon la définition donnée dans le texte ?",
+   "Quel est le nom du premier satellite artificiel, et en quelle année a-t-il été lancé ?",
+   "Quel pays a lancé ce premier satellite ?",
+   "Quels sont les différents types de satellites cités dans le texte et à quoi servent-ils ?",
+   "En quoi les satellites météorologiques sont-ils utiles ?",
+   "Comment les satellites contribuent-ils à la prévention des catastrophes naturelles ?",
+   "Relevez une phrase qui montre l'importance des satellites dans la vie quotidienne.",
+   "Que signifie l'expression « mettre en orbite » ?",
+   "Quelle est l'idée développée dans la conclusion du texte ?",
+   "Quel est le type de texte indiqué dans la fiche signalétique ?"
+  ]
+},
+{
+  icon:"💉",
+  title:"La vaccination",
+  source:"Source : Cécile Gallet, « Espace des sciences »",
+  text:[
+   "Quand on est enfant, il y a les visites chez le médecin pour les « vaccins ». Il est nécessaire d'être vacciné pour échapper à certaines maladies.",
+   "Le mécanisme de protection — Vacciner quelqu'un consiste à lui injecter un microbe tué ou affaibli ou encore un morceau de ce microbe ou la toxine qu'il produit afin de forcer le système immunitaire de la personne à se défendre.",
+   "En faisant comme si le vrai microbe était entré dans le corps, on amène le corps à produire des défenses précisément contre ce microbe. Une fois le vaccin introduit dans l'organisme, notre corps réagit donc comme s'il était vraiment infecté.",
+   "Signes de défense et sécurité — Quelques fois, le patient vacciné peut avoir de la fièvre, signe que son système immunitaire est en train de se défendre. Mais l'agent infectieux affaibli contenu dans le vaccin ne déclenche pas la maladie dont il est normalement responsable.",
+   "Types de maladies et exemples — Un vaccin peut être utilisé contre des maladies dues à des virus ou des bactéries. Ainsi les vaccins contre la rubéole, la rougeole, les oreillons, la poliomyélite ou encore la grippe préparent le corps à se défendre contre des virus. Les vaccins qui protègent contre des maladies dues à des bactéries sont ceux contre la coqueluche, la tuberculose, le tétanos, l'hépatite B."
+  ],
+  questions:[
+   "Pourquoi est-il nécessaire d'être vacciné, selon l'introduction du texte ?",
+   "En quoi consiste l'action de « vacciner » quelqu'un ?",
+   "Comment le vaccin agit-il pour protéger l'organisme ? Expliquez le mécanisme avec vos propres mots.",
+   "Pourquoi un patient vacciné peut-il parfois avoir de la fièvre ?",
+   "Le vaccin déclenche-t-il la maladie qu'il est censé prévenir ? Justifiez votre réponse à partir du texte.",
+   "Citez deux maladies dues à des virus contre lesquelles on peut être vacciné.",
+   "Citez deux maladies dues à des bactéries contre lesquelles on peut être vacciné.",
+   "Quelle est la différence entre une maladie due à un virus et une maladie due à une bactérie, d'après le texte ?",
+   "Qui est l'auteur (ou la source) de ce texte ?",
+   "Expliquez avec vos propres mots pourquoi la vaccination peut être vue comme une « ruse » pour le système immunitaire."
+  ]
+},
+{
+  icon:"💧",
+  title:"Le cycle de l'eau",
+  source:"",
+  text:[
+   "L'eau est une ressource indispensable à la vie sur Terre. Elle circule en permanence dans la nature grâce à un phénomène naturel appelé le cycle de l'eau. Ce cycle assure le renouvellement continu des réserves d'eau de la planète.",
+   "Sous l'effet de la chaleur du soleil, l'eau des océans, des mers, des lacs et des rivières s'évapore et se transforme en vapeur d'eau. Les plantes participent également à ce phénomène en libérant de la vapeur d'eau dans l'atmosphère par un processus appelé transpiration.",
+   "Lorsque la vapeur d'eau s'élève dans les couches plus froides de l'atmosphère, elle se condense en fines gouttelettes qui forment les nuages. Lorsque ces gouttelettes deviennent trop lourdes, elles retombent sur la Terre sous forme de précipitations : pluie, neige ou grêle.",
+   "Une partie de cette eau s'infiltre dans le sol et alimente les nappes souterraines. Une autre partie s'écoule vers les cours d'eau, les lacs et les océans. L'eau est alors de nouveau chauffée par le soleil, et le cycle recommence.",
+   "Le cycle de l'eau joue un rôle essentiel dans l'équilibre des écosystèmes et dans la répartition de l'eau douce sur la planète. Il constitue l'un des phénomènes naturels les plus importants pour la vie."
+  ],
+  questions:[
+   "Pourquoi dit-on que l'eau est une ressource indispensable à la vie sur Terre ?",
+   "Comment s'appelle le phénomène qui permet à l'eau de circuler en permanence dans la nature ?",
+   "Que se passe-t-il avec l'eau des océans sous l'effet de la chaleur du soleil ?",
+   "Qu'est-ce que la « transpiration » chez les plantes, selon le texte ?",
+   "Comment se forment les nuages, d'après le troisième paragraphe ?",
+   "Citez les trois formes de précipitations mentionnées dans le texte.",
+   "Que devient l'eau qui s'infiltre dans le sol ?",
+   "Nommez, dans l'ordre, les quatre étapes du cycle de l'eau représentées dans le schéma.",
+   "Quel rôle joue le cycle de l'eau dans l'équilibre des écosystèmes, selon la conclusion ?",
+   "Résumez en 3 à 4 phrases l'ensemble du cycle de l'eau, du début à la fin."
+  ]
+},
+{
+  icon:"🐝",
+  title:"La société des abeilles",
+  source:"Manuel de Biologie / Hatier / 5ème",
+  text:[
+   "Chez les abeilles, l'individu est peu de chose, la famille n'existe pas, la société est tout. La survie de l'espèce passe par une organisation sociale étonnante.",
+   "Une communauté d'abeilles compte environ cinquante mille individus et comprend : une seule femelle fertile, la reine, dont la durée de vie est d'environ quatre ans ; quelques mâles ou faux bourdons dont la vie est relativement courte : ils sont chassés ou tués en automne ; des ouvrières, femelles stériles, dont la durée de vie est d'une quarantaine de jours.",
+   "La reine est la mère de toute la colonie. Par beau temps, elle s'envole de la ruche, suivie de l'escorte bourdonnante des mâles : c'est le vol nuptial pendant lequel elle est fécondée. Deux jours après, elle pond sans arrêt dans des alvéoles donnant deux ou trois mille œufs par jour. De l'œuf sort une larve sans yeux ni pattes. Nourrie par les ouvrières, la larve grossit en subissant des mues. Quelques jours suffisent pour qu'elle remplisse l'alvéole. Alors, elle tisse un cocon de soie dans lequel elle se transforme en nymphe. Pendant une dizaine de jours, elle subit de nombreuses métamorphoses à l'issue desquelles sort un insecte parfait. Cet individu ronge son couvercle, quitte sa demeure et se met au travail."
+  ],
+  questions:[
+   "Que signifie la phrase « l'individu est peu de chose, la famille n'existe pas, la société est tout » chez les abeilles ?",
+   "Combien d'individus compte environ une communauté d'abeilles ?",
+   "Quelles sont les trois catégories d'abeilles qui composent une colonie ?",
+   "Quelle est la durée de vie de la reine ? Et celle des ouvrières ?",
+   "Que devient le sort des mâles (faux bourdons) en automne ?",
+   "Qu'est-ce que le « vol nuptial » évoqué dans le texte ?",
+   "Combien d'œufs la reine peut-elle pondre par jour ?",
+   "Décrivez, avec vos propres mots, les étapes de la métamorphose de l'abeille, de l'œuf à l'insecte adulte.",
+   "Que fait l'insecte une fois sa métamorphose terminée, selon la dernière phrase du texte ?",
+   "Quelle est la source de ce texte ?"
+  ]
+},
+{
+  icon:"🔎",
+  title:"Le microscope",
+  source:"Encyclopédie en ligne Wikipédia",
+  text:[
+   "Le microscope est un appareil optique qui permet d'agrandir l'image et donc de voir de petits détails. C'est l'appareil d'observations scientifiques le plus connu du grand public. Il est utilisé surtout en biologie pour étudier les cellules, en géochimie pour reconnaître les roches et en métallurgie (ou métallographie) pour examiner la structure d'un métal ou d'un alliage. Le premier microscope fut en 1590 (sans doute fabriqué par Hans et Zacharias Janssen, deux fabricants de lentilles néerlandais).",
+   "Un microscope optique est composé de : le miroir, qui sert à réfléchir la lumière ambiante pour éclairer l'échantillon par en dessous ; le diaphragme, une ouverture de diamètre variable, permettant de restreindre la qualité de lumière qui éclaire l'échantillon ; la platine porte-échantillon, où l'on pose l'échantillon ; l'objectif, une lentille ou un ensemble de lentilles réalisant le grossissement (il y a plusieurs objectifs, correspondant à plusieurs grossissements, montés sur une tourelle) ; l'oculaire, une lentille ou un ensemble de lentilles formant l'image d'une matière reposante pour l'œil (on peut remplacer l'oculaire par un appareil photographique).",
+   "Le microscope optique se base sur les lentilles pour obtenir une image agrandie de l'échantillon à observer (généralement on dispose deux lentilles convergentes de façon à ce qu'elles soient alignées, il s'agit d'un système centré, composé en partie de doublets pour corriger certaines des aberrations optiques)."
+  ],
+  questions:[
+   "À quoi sert un microscope, selon la définition donnée au début du texte ?",
+   "Dans quels domaines scientifiques le microscope est-il utilisé, selon le texte ?",
+   "Qui aurait fabriqué le premier microscope, et en quelle année ?",
+   "Quel est le rôle du miroir dans un microscope optique ?",
+   "À quoi sert le diaphragme ?",
+   "Que pose-t-on sur la platine porte-échantillon ?",
+   "Quelle est la différence entre l'objectif et l'oculaire, d'après le texte ?",
+   "Par quel appareil peut-on remplacer l'oculaire, selon le texte ?",
+   "Sur quel principe optique se base le microscope pour obtenir une image agrandie ?",
+   "Quelle est la source citée à la fin du texte ?"
+  ]
+},
+{
+  icon:"🏥",
+  title:"Le scanner",
+  source:"Texte adapté à partir de documents de vulgarisation médicale.",
+  text:[
+   "Définition — Le scanner est un appareil médical permettant d'observer l'intérieur du corps humain sans avoir recours à une intervention chirurgicale. Il utilise des rayons X et un système informatique performant pour produire des images détaillées des organes, des os et des tissus.",
+   "Comment ça marche ? — Lors d'un examen, le patient s'allonge sur une table mobile qui se déplace à l'intérieur d'un large anneau. Pendant quelques minutes, l'appareil réalise de nombreuses images sous différents angles. Un ordinateur les assemble ensuite afin d'obtenir des coupes très précises de la partie du corps examinée.",
+   "À quoi ça sert ? — Le scanner est utilisé pour diagnostiquer de nombreuses maladies et blessures. Il permet notamment de détecter des fractures, des tumeurs, des infections ou encore des anomalies des organes internes. Grâce à sa rapidité et à sa précision, il constitue aujourd'hui un outil indispensable dans les hôpitaux et les centres de santé.",
+   "À savoir — Cependant, comme il utilise des rayons X, son emploi doit rester limité aux situations où il est réellement nécessaire. Les médecins veillent donc à n'y avoir recours que lorsque les bénéfices attendus sont supérieurs aux risques éventuels."
+  ],
+  questions:[
+   "Qu'est-ce qu'un scanner, selon la définition donnée dans le texte ?",
+   "Quelles technologies le scanner utilise-t-il pour produire des images ?",
+   "Décrivez, avec vos propres mots, le déroulement d'un examen au scanner.",
+   "Quel rôle joue l'ordinateur dans le fonctionnement du scanner ?",
+   "Citez trois types de problèmes de santé que le scanner permet de détecter.",
+   "Pourquoi le scanner est-il considéré comme un outil indispensable dans les hôpitaux ?",
+   "Pourquoi son emploi doit-il rester limité à certaines situations, selon la dernière partie du texte ?",
+   "Que signifie l'expression « bénéfices supérieurs aux risques » dans le contexte du texte ?",
+   "Le texte est organisé en quatre parties : donnez le titre de chacune.",
+   "D'où provient ce texte, selon l'indication donnée à la fin ?"
+  ]
+},
+{
+  icon:"🧬",
+  title:"La cellule animale",
+  source:"C. Patin et J.C Boisson, Éléments de biologie, Paris, 1971",
+  text:[
+   "Chez l'homme la vie se traduit par de nombreuses propriétés telles que l'existence de mouvements, de phénomènes de synthèse, et, souvent de reproduction. Ces propriétés sont retrouvées au niveau des organes, des tissus et des cellules ; ainsi, la cellule possède toutes les propriétés de l'homme. C'est la plus petite partie de la matière vivante qui, isolée, peut conserver les propriétés fondamentales de l'être vivant qui les possédait. Au XIXe siècle, on a formulé la théorie cellulaire qui s'exprime en deux points : tout être vivant est constitué de cellules ; tout être vivant est issu de cellules.",
+   "L'étude de la cellule fait l'objet d'une science particulière : la cytologie.",
+   "La cytologie est née avec l'observation au microscope faite par le hollandais Zacharia Jansen au XVIIe siècle. Elle a progressé grâce au microscope électronique dont le grossissement permet d'étudier l'ultrastructure des organites de la cellule."
+  ],
+  questions:[
+   "Quelles propriétés caractérisent la vie chez l'homme, selon le premier paragraphe ?",
+   "Pourquoi peut-on dire que « la cellule possède toutes les propriétés de l'homme » ?",
+   "Qu'est-ce que la cellule, selon la définition donnée dans le texte ?",
+   "Énoncez les deux points de la théorie cellulaire formulée au XIXe siècle.",
+   "Quel nom donne-t-on à la science qui étudie la cellule ?",
+   "Qui a fait naître la cytologie, et à quel siècle ?",
+   "Grâce à quel instrument la cytologie a-t-elle progressé, selon le texte ?",
+   "Que permet d'étudier le microscope électronique, d'après le texte ?",
+   "Que signifie le mot « ultrastructure » dans le contexte du texte ?",
+   "Quelle est la source (auteurs, lieu, année) de ce texte ?"
+  ]
+},
+{
+  icon:"💊",
+  title:"L'insuline",
+  source:"Texte adapté à partir de documents de vulgarisation médicale.",
+  text:[
+   "L'insuline est une hormone produite par le pancréas. Elle joue un rôle essentiel dans l'organisme en permettant au glucose, provenant des aliments, d'entrer dans les cellules pour leur fournir de l'énergie.",
+   "Après chaque repas, le taux de sucre dans le sang augmente. Le pancréas libère alors de l'insuline afin de maintenir ce taux à un niveau normal. Grâce à cette hormone, le glucose est utilisé par les cellules ou stocké pour être utilisé plus tard.",
+   "Lorsque le corps ne produit pas suffisamment d'insuline ou lorsque les cellules ne l'utilisent pas correctement, une maladie appelée diabète peut apparaître. Cette maladie provoque une augmentation du taux de sucre dans le sang et nécessite un suivi médical régulier.",
+   "Aujourd'hui, l'insuline est utilisée comme traitement pour certaines personnes atteintes de diabète. Elle peut être administrée sous forme d'injections ou à l'aide d'une pompe à insuline. Grâce aux progrès de la médecine, ce traitement permet à de nombreux patients de mener une vie normale."
+  ],
+  questions:[
+   "Qu'est-ce que l'insuline, et par quel organe est-elle produite ?",
+   "Quel est le rôle de l'insuline dans l'organisme ?",
+   "Que se passe-t-il dans le sang après chaque repas ?",
+   "Comment le pancréas réagit-il à l'augmentation du taux de sucre dans le sang ?",
+   "Que peut-il arriver si le corps ne produit pas suffisamment d'insuline ?",
+   "Comment s'appelle la maladie provoquée par un manque d'insuline ou une mauvaise utilisation de celle-ci ?",
+   "Sous quelles formes l'insuline peut-elle être administrée à un patient diabétique ?",
+   "Décrivez, avec vos propres mots, les étapes du schéma « Comment l'insuline agit ».",
+   "Que faut-il retenir, à propos du rôle de l'insuline, d'après l'encadré final du texte ?",
+   "D'où provient ce texte, selon l'indication en bas de page ?"
+  ]
+},
+{
+  icon:"🫒",
+  title:"Les graisses au banc des accusés",
+  source:"",
+  text:[
+   "Les régimes alimentaires riches en graisses favorisent les maladies cardiaques, mais qu'en est-il pour le cancer ? Y a-t-il une différence selon le type de graisses que nous consommons ? De fortes preuves existent pour l'oméga-6 (mauvais) et pour l'oméga-3 (bon). Pour les autres types, le lien avec le cancer est toujours obscur. Voici un état des connaissances.",
+   "Tableau des risques selon le type de graisse (influence protectrice / effet incertain / augmentation du risque de cancer) : Tournesol 8% / 8% / 82% — Arachide 25% / 12% / 63% — Soja 70% / 14% / 16% — Maïs 52% / 8% / 40% — Beurre 7% / 3% / 90% — Olive 10% / 5% / 85%.",
+   "Idée principale : le type de graisses que nous consommons peut influencer le risque de maladies cardiaques et de cancer. Les oméga-6 sont associés à un risque plus élevé, tandis que les oméga-3 sont bénéfiques."
+  ],
+  questions:[
+   "Quel est le sujet principal traité dans ce texte ?",
+   "Quelles sont les deux questions que se pose l'auteur au début du texte ?",
+   "Quel type de graisse est présenté comme « mauvais » pour la santé ? Lequel est présenté comme « bon » ?",
+   "Selon le tableau, quel type de graisse a le pourcentage le plus élevé d'« augmentation du risque » ?",
+   "Quel type de graisse a le pourcentage le plus élevé d'« influence protectrice » ?",
+   "Comparez le beurre et l'huile d'olive selon les données du tableau.",
+   "Pourquoi peut-on dire que le lien entre certaines graisses et le cancer reste « obscur » ?",
+   "Que signifie l'expression « au banc des accusés » utilisée dans le titre ? À quoi fait-elle référence ?",
+   "Résumez en une phrase l'idée principale du texte, telle qu'elle est donnée dans l'encadré final.",
+   "D'après ce texte, quel conseil alimentaire peut-on donner en matière de consommation de graisses ?"
+  ]
+}
+];
+
+const grid = document.getElementById('cardsGrid');
+data.forEach((item, idx)=>{
+  const card = document.createElement('div');
+  card.className = 'fiche-card';
+  card.style.borderColor = 'transparent';
+  card.onmouseenter = ()=> card.style.borderColor = colors[idx % colors.length];
+  card.onmouseleave = ()=> card.style.borderColor = 'transparent';
+  card.onclick = ()=> openText(idx);
+  card.innerHTML = `
+    <span class="icon">${item.icon}</span>
+    <h3>${item.title}</h3>
+    <span class="tag" style="background:${colors[idx % colors.length]}">10 questions</span>
+  `;
+  grid.appendChild(card);
+});
+
+function openText(idx){
+  const item = data[idx];
+  const c = colors[idx % colors.length];
+  let paragraphsHtml = item.text.map(p=>`<p>${p}</p>`).join('');
+  let sourceHtml = item.source ? `<div class="source-line">${item.source}</div>` : '';
+
+  let questionsHtml = item.questions.map((q,i)=>`
+    <div class="question-block" style="border-left-color:${c}">
+      <span class="qnum" style="color:${c}">${i+1}.</span>${q}
+      <textarea placeholder="Écrivez votre réponse ici..."></textarea>
+    </div>
+  `).join('');
+
+  document.getElementById('readerContent').innerHTML = `
+    <div class="text-card">
+      <h2><span>${item.icon}</span> ${item.title}</h2>
+      ${paragraphsHtml}
+      ${sourceHtml}
+    </div>
+    <div class="text-card">
+      <div class="quiz-header">
+        <h3>📝 Questions de compréhension</h3>
+        <div class="quiz-actions">
+          <button class="secondary" onclick="clearAnswers()">Effacer mes réponses</button>
+          <button onclick="window.print()">Imprimer</button>
+        </div>
+      </div>
+      ${questionsHtml}
+    </div>
+  `;
+
+  document.getElementById('gridView').style.display = 'none';
+  document.getElementById('readerView').style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function clearAnswers(){
+  document.querySelectorAll('#readerContent textarea').forEach(t=> t.value = '');
+}
+
+function showGrid(){
+  document.getElementById('readerView').style.display = 'none';
+  document.getElementById('gridView').style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+</body>
+</html>
